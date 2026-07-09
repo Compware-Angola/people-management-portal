@@ -1,0 +1,52 @@
+{
+  "name": "gestao-pessoa-front-end",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Compware-Angola/gestao-pessoa-front-end.git"
+  },
+  "scripts": {
+    "dev": "vite dev --port 4004",
+    "generate-routes": "tsr generate",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "lint": "eslint",
+    "format": "prettier --write . && eslint --fix",
+    "check": "prettier --check ."
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "4.3.2",
+    "@tanstack/react-devtools": "0.10.8",
+    "@tanstack/react-router": "1.170.17",
+    "@tanstack/react-router-devtools": "1.167.0",
+    "@tanstack/router-plugin": "1.168.19",
+    "lucide-react": "1.23.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "tailwindcss": "4.3.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "lightningcss"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "0.5.20",
+    "@tanstack/devtools-vite": "0.8.1",
+    "@tanstack/eslint-config": "0.4.0",
+    "@tanstack/router-cli": "1.167.18",
+    "@types/node": "26.1.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "eslint": "10.6.0",
+    "prettier": "3.9.4",
+    "typescript": "6.0.3",
+    "vite": "8.1.4"
+  }
+}
