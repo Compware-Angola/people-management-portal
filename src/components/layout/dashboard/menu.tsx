@@ -51,7 +51,7 @@ export const ADMIN_NAV: NavItem[] = [
     title: 'Departamentos',
     icon: Briefcase,
     url: '/departments',
-    permission: [PermissionsEnum.READ_DEPARTMENT],
+    permission: [PermissionsEnum.READ_DEPARTMENT,PermissionsEnum.READ_DEPARTMENT],
   },
   {
     title: 'Segurança',

@@ -7,7 +7,7 @@ export function DashboardSidebarHeader() {
   return (
     <SidebarHeader>
       <Link
-        to="/"
+        to="/admins"
         className={cn(
           'h-16 shrink-0 flex items-center gap-2.5',
           !open ? 'justify-center px-0' : 'px-5',
