@@ -22,7 +22,7 @@ export function DashboardLayout({
         <DashboardSidebarHeader />
 
         <SidebarContent>
-          <NavMain items={DASHBOARD_NAV}  />
+          <NavMain items={DASHBOARD_NAV} />
           <NavMain items={ADMIN_NAV} groupLabel="Administração" />
           {/* <NavMain items={IMOVEIS_NAV} groupLabel="Imóveis" />
           <NavMain items={PORTAIS_NAV} groupLabel="Portais" />

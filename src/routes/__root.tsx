@@ -27,13 +27,11 @@ export const Route = createRootRoute({
       },
       {
         name: 'description',
-        content:
-          'Portal do Colaborador',
+        content: 'Portal do Colaborador',
       },
       {
         name: 'keywords',
-        content:
-          'Portal do Colaborador',
+        content: 'Portal do Colaborador',
       },
       {
         name: 'author',
@@ -107,7 +105,7 @@ export const Route = createRootRoute({
       // Microsoft
       {
         name: 'msapplication-TileColor',
-        content: '#eb2525ff',
+        content: '#2563eb',
       },
       {
         name: 'msapplication-config',
