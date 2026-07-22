@@ -8,9 +8,10 @@ import {
   Plus,
   Briefcase,
 } from 'lucide-react'
-import { wizardFormOpts } from '../form-options'
+
 import { professionalExperienceSchema } from '../schemas/experience.schema'
 import { useEnsureMinArrayItems } from '../hooks/use-ensure-min-array-items'
+import { wizardFormOpts } from '../utils'
 
 const EMPTY_EXPERIENCE_ITEM = {
   institution: '',

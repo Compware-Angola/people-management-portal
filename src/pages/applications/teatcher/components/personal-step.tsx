@@ -7,15 +7,15 @@ import {
   PhoneIcon,
   UserIcon,
   IdCardIcon,
-  GraduationCap,
 } from 'lucide-react'
 import { useMaritalStatusQuery } from '@/hooks/marital-status'
 import { useDocumentTypesQuery } from '@/hooks/document-types'
 import { useGendersQuery } from '@/hooks/genders'
 import { useNationalitiesQuery } from '@/hooks/nationalities'
-import { wizardFormOpts } from '../form-options'
+
 import { personalSchema } from '../schemas/personal.schema'
 import { Header } from './header'
+import { wizardFormOpts } from '../utils'
 
 export const PersonalStep = withForm({
   ...wizardFormOpts,

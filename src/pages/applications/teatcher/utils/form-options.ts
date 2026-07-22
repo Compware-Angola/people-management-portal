@@ -1,5 +1,6 @@
 import { formOptions } from '@tanstack/react-form'
-import type { AcademicItem } from './schemas/academic.schema'
+import type { AcademicItem } from '../schemas/academic.schema'
+
 
 
 export const wizardFormOpts = formOptions({

@@ -11,9 +11,9 @@ import {
 } from 'lucide-react'
 import { useAcademicDegreesQuery } from '@/hooks/academic-degrees'
 import { useCourseTrainingAreas } from '@/hooks/course-training-areas'
-import { wizardFormOpts } from '../form-options'
 import { academicSchema } from '../schemas/academic.schema'
 import { useEnsureMinArrayItems } from '../hooks/use-ensure-min-array-items'
+import { wizardFormOpts } from '../utils'
 
 const EMPTY_ACADEMIC_ITEM = {
   course: '',

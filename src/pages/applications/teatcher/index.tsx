@@ -7,10 +7,12 @@ import { StepsSidebar } from '../components/StepsSidebar'
 import { PersonalStep } from './components/personal-step'
 import { AcademicStep } from './components/academic-Step'
 import { ExperienceStep } from './components/experience-step'
-import { applicationSchema } from './schemas/application-schema'
-import { wizardFormOpts } from './form-options'
+import { applicationSchema} from './schemas/application-schema'
+import type {ApplicationFormData} from './schemas/application-schema';
 import { DocumentsStep } from './components/documents-step'
-import { buildApplicationFormData } from '@/lib/build-application-form-data'
+
+import { buildApplicationFormData, wizardFormOpts } from './utils'
+import { useCreateTeacherApplication } from '@/hooks/application'
 
 const steps = [
   { title: 'Dados pessoais' },
@@ -21,7 +23,8 @@ const steps = [
 
 export function TeatcherApplicationPage() {
   const [step, setStep] = useState(0)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const {mutateAsync:createTeacherApp} = useCreateTeacherApplication()
 
   const form = useAppForm({
     ...wizardFormOpts,
@@ -30,30 +33,11 @@ export function TeatcherApplicationPage() {
       onDynamic: applicationSchema,
     },
     onSubmit: async ({ value }) => {
-      setIsSubmitting(true)
-      try {
-        const formData = buildApplicationFormData(value)
-
-        for (const [key, val] of formData.entries()) {
-          console.log(key, val)
-        }
-        // const response = await fetch('/api/teacher-applications', {
-        //   method: 'POST',
-        //   body: formData,
-        // })
-
-        // if (!response.ok) {
-        //   const errorBody = await response.json().catch(() => null)
-        //   throw new Error(errorBody?.message ?? 'Falha ao enviar candidatura')
-        // }
-
-        // form.reset()
-        // setStep(0)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsSubmitting(false)
-      }
+     
+      const data = buildApplicationFormData(value as ApplicationFormData )
+       console.log(data)
+    await createTeacherApp({data})
+     
     },
   })
 

@@ -1,7 +1,7 @@
 import { withForm } from '@/components/forms'
 import { Button } from '@/components/ui/button'
-import { wizardFormOpts } from '../form-options'
 import { documentsSchema } from '../schemas/documents.schema'
+import { wizardFormOpts } from '../utils'
 
 export const DocumentsStep = withForm({
   ...wizardFormOpts,
@@ -88,7 +88,7 @@ export const DocumentsStep = withForm({
               </Button>
 
               <form.AppForm>
-                <form.SubscribeButton label="Finalizar" />
+                <form.SubscribeButton label="Finalizar"  />
               </form.AppForm>
             </div>
           </form>
