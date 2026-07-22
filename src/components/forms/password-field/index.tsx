@@ -5,7 +5,6 @@ import type { Updater } from '@tanstack/react-form'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 
-
 interface PasswordFieldProps {
   label?: string
   placeholder?: string

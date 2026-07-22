@@ -1,9 +1,22 @@
-//  @ts-check
+// @ts-check
 
 import { tanstackConfig } from '@tanstack/eslint-config'
 
 export default [
+  {
+    ignores: [
+      '.history',
+      'node_modules',
+      'dist',
+      'build',
+      'coverage',
+      'eslint.config.js',
+      'prettier.config.js',
+    ],
+  },
+
   ...tanstackConfig,
+
   {
     rules: {
       'import/no-cycle': 'off',
@@ -13,8 +26,5 @@ export default [
       '@typescript-eslint/require-await': 'off',
       'pnpm/json-enforce-catalog': 'off',
     },
-  },
-  {
-    ignores: ['eslint.config.js', 'prettier.config.js'],
   },
 ]

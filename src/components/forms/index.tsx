@@ -4,10 +4,12 @@ import { PasswordField } from './password-field'
 import { TextField } from './text-field'
 import { TextareaField } from './text-area-field'
 import { OTPField } from './otp-field'
-import { AsyncComboboxField, ComboboxField } from './async-combobox-field'
+import { AsyncComboboxField, ComboboxField } from './combobox-field'
 import { SelectField } from './select-field'
+import { FileField } from './file-field'
+import { SubscribeButton } from './subscribe-button'
 
-export const { fieldContext, formContext, useFieldContext, } =
+export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
 export const { useAppForm, withForm } = createFormHook({
@@ -22,6 +24,9 @@ export const { useAppForm, withForm } = createFormHook({
     AsyncComboboxField,
     SelectField,
     ComboboxField,
+    FileField,
   },
-  formComponents: {},
+  formComponents: {
+    SubscribeButton,
+  },
 })
