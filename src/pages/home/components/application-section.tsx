@@ -3,7 +3,7 @@ import { ApplicationCard } from './application-card'
 
 export function ApplicationSection() {
   return (
-    <section>
+    <section  id="application">
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
         <ApplicationCard
           to="/applications/teacher"

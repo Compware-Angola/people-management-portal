@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Link } from "@tanstack/react-router";
 import { LogIn } from "lucide-react";
 
 export function LoginCTA() {
@@ -16,10 +17,13 @@ export function LoginCTA() {
                 atualizar informações ou concluir etapas pendentes.
               </p>
             </div>
+            <Link to='/login'>
             <Button size="lg" variant="default" className="relative gap-2">
               <LogIn className="h-4 w-4" />
               Entrar na Plataforma
             </Button>
+            </Link>
+            
           </div>
         </Card>
   )

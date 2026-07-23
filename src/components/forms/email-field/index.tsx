@@ -38,6 +38,7 @@ export function EmailField(props: EmailFieldProps) {
           type="email"
           value={field.state.value}
           onBlur={field.handleBlur}
+          autoComplete="email"
           onChange={(e: { target: { value: Updater<string> } }) =>
             field.handleChange(e.target.value)
           }

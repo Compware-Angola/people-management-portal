@@ -19,11 +19,13 @@ export function HomeHeader() {
               </p>
             </div>
           </Link>
-
-          <Button variant="outline" className="gap-2">
+<Link to="/login">
+ <Button variant="outline" className="gap-2">
             <LogInIcon className="h-4 w-4" />
             Entrar
           </Button>
+</Link>
+         
         </div>
       </header>
   )

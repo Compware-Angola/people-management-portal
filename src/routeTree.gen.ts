@@ -14,6 +14,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PrivateDasboardRouteImport } from './routes/_private/dasboard'
 import { Route as PrivateSplatRouteImport } from './routes/_private/$'
 import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/applications/route'
+import { Route as PublicLoginIndexRouteImport } from './routes/_public/login/index'
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
 import { Route as PrivateAdminsIndexRouteImport } from './routes/_private/admins/index'
 import { Route as PublicApplicationsTeacherRouteImport } from './routes/_public/applications/teacher'
@@ -42,6 +43,11 @@ const PublicApplicationsRouteRoute = PublicApplicationsRouteRouteImport.update({
   path: '/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicLoginIndexRoute = PublicLoginIndexRouteImport.update({
+  id: '/_public/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicApplicationsIndexRoute = PublicApplicationsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins/': typeof PrivateAdminsIndexRoute
   '/applications/': typeof PublicApplicationsIndexRoute
+  '/login/': typeof PublicLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins': typeof PrivateAdminsIndexRoute
   '/applications': typeof PublicApplicationsIndexRoute
+  '/login': typeof PublicLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/_private/admins/': typeof PrivateAdminsIndexRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
+  '/_public/login/': typeof PublicLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/applications/teacher'
     | '/admins/'
     | '/applications/'
+    | '/login/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/applications/teacher'
     | '/admins'
     | '/applications'
+    | '/login'
   id:
     | '__root__'
     | '/_private'
@@ -115,12 +126,14 @@ export interface FileRouteTypes {
     | '/_public/applications/teacher'
     | '/_private/admins/'
     | '/_public/applications/'
+    | '/_public/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicApplicationsRouteRoute: typeof PublicApplicationsRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicLoginIndexRoute: typeof PublicLoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       path: '/applications'
       fullPath: '/applications'
       preLoaderRoute: typeof PublicApplicationsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/login/': {
+      id: '/_public/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof PublicLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/applications/': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicApplicationsRouteRoute: PublicApplicationsRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
+  PublicLoginIndexRoute: PublicLoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
