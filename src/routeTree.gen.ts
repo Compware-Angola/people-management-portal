@@ -10,7 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivateRouteRouteImport } from './routes/_private/route'
-import { Route as PrivateIndexRouteImport } from './routes/_private/index'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PrivateDasboardRouteImport } from './routes/_private/dasboard'
 import { Route as PrivateSplatRouteImport } from './routes/_private/$'
 import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/applications/route'
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
@@ -21,9 +22,14 @@ const PrivateRouteRoute = PrivateRouteRouteImport.update({
   id: '/_private',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PrivateIndexRoute = PrivateIndexRouteImport.update({
-  id: '/',
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/_public/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivateDasboardRoute = PrivateDasboardRouteImport.update({
+  id: '/dasboard',
+  path: '/dasboard',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PrivateSplatRoute = PrivateSplatRouteImport.update({
@@ -54,16 +60,18 @@ const PublicApplicationsTeacherRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof PrivateIndexRoute
+  '/': typeof PublicIndexRoute
   '/applications': typeof PublicApplicationsRouteRouteWithChildren
   '/$': typeof PrivateSplatRoute
+  '/dasboard': typeof PrivateDasboardRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins/': typeof PrivateAdminsIndexRoute
   '/applications/': typeof PublicApplicationsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof PublicIndexRoute
   '/$': typeof PrivateSplatRoute
-  '/': typeof PrivateIndexRoute
+  '/dasboard': typeof PrivateDasboardRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins': typeof PrivateAdminsIndexRoute
   '/applications': typeof PublicApplicationsIndexRoute
@@ -73,7 +81,8 @@ export interface FileRoutesById {
   '/_private': typeof PrivateRouteRouteWithChildren
   '/_public/applications': typeof PublicApplicationsRouteRouteWithChildren
   '/_private/$': typeof PrivateSplatRoute
-  '/_private/': typeof PrivateIndexRoute
+  '/_private/dasboard': typeof PrivateDasboardRoute
+  '/_public/': typeof PublicIndexRoute
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/_private/admins/': typeof PrivateAdminsIndexRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
@@ -84,17 +93,25 @@ export interface FileRouteTypes {
     | '/'
     | '/applications'
     | '/$'
+    | '/dasboard'
     | '/applications/teacher'
     | '/admins/'
     | '/applications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/$' | '/' | '/applications/teacher' | '/admins' | '/applications'
+  to:
+    | '/'
+    | '/$'
+    | '/dasboard'
+    | '/applications/teacher'
+    | '/admins'
+    | '/applications'
   id:
     | '__root__'
     | '/_private'
     | '/_public/applications'
     | '/_private/$'
-    | '/_private/'
+    | '/_private/dasboard'
+    | '/_public/'
     | '/_public/applications/teacher'
     | '/_private/admins/'
     | '/_public/applications/'
@@ -103,6 +120,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicApplicationsRouteRoute: typeof PublicApplicationsRouteRouteWithChildren
+  PublicIndexRoute: typeof PublicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -114,11 +132,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_private/': {
-      id: '/_private/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof PrivateIndexRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_private/dasboard': {
+      id: '/_private/dasboard'
+      path: '/dasboard'
+      fullPath: '/dasboard'
+      preLoaderRoute: typeof PrivateDasboardRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     '/_private/$': {
@@ -161,13 +186,13 @@ declare module '@tanstack/react-router' {
 
 interface PrivateRouteRouteChildren {
   PrivateSplatRoute: typeof PrivateSplatRoute
-  PrivateIndexRoute: typeof PrivateIndexRoute
+  PrivateDasboardRoute: typeof PrivateDasboardRoute
   PrivateAdminsIndexRoute: typeof PrivateAdminsIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateSplatRoute: PrivateSplatRoute,
-  PrivateIndexRoute: PrivateIndexRoute,
+  PrivateDasboardRoute: PrivateDasboardRoute,
   PrivateAdminsIndexRoute: PrivateAdminsIndexRoute,
 }
 
@@ -194,6 +219,7 @@ const PublicApplicationsRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicApplicationsRouteRoute: PublicApplicationsRouteRouteWithChildren,
+  PublicIndexRoute: PublicIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
