@@ -1,7 +1,15 @@
-import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
+import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { DashboardLayout } from '@/components/layout/dashboard'
 
 export const Route = createFileRoute('/_private')({
+  beforeLoad: ({ context, location }) => {
+    if (!context.authStorage.isAuthenticated()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href }
+      })
+    }
+  },
   component: RouteComponent,
   notFoundComponent: () => <NotFoundPrivate />,
 })

@@ -14,10 +14,11 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PrivateDasboardRouteImport } from './routes/_private/dasboard'
 import { Route as PrivateSplatRouteImport } from './routes/_private/$'
 import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/applications/route'
-import { Route as PublicLoginIndexRouteImport } from './routes/_public/login/index'
+import { Route as PublicAuthRouteRouteImport } from './routes/_public/_auth/route'
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
 import { Route as PrivateAdminsIndexRouteImport } from './routes/_private/admins/index'
 import { Route as PublicApplicationsTeacherRouteImport } from './routes/_public/applications/teacher'
+import { Route as PublicAuthLoginIndexRouteImport } from './routes/_public/_auth/login/index'
 
 const PrivateRouteRoute = PrivateRouteRouteImport.update({
   id: '/_private',
@@ -43,9 +44,8 @@ const PublicApplicationsRouteRoute = PublicApplicationsRouteRouteImport.update({
   path: '/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicLoginIndexRoute = PublicLoginIndexRouteImport.update({
-  id: '/_public/login/',
-  path: '/login/',
+const PublicAuthRouteRoute = PublicAuthRouteRouteImport.update({
+  id: '/_public/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicApplicationsIndexRoute = PublicApplicationsIndexRouteImport.update({
@@ -64,6 +64,11 @@ const PublicApplicationsTeacherRoute =
     path: '/teacher',
     getParentRoute: () => PublicApplicationsRouteRoute,
   } as any)
+const PublicAuthLoginIndexRoute = PublicAuthLoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => PublicAuthRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
@@ -73,7 +78,7 @@ export interface FileRoutesByFullPath {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins/': typeof PrivateAdminsIndexRoute
   '/applications/': typeof PublicApplicationsIndexRoute
-  '/login/': typeof PublicLoginIndexRoute
+  '/login/': typeof PublicAuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -82,11 +87,12 @@ export interface FileRoutesByTo {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins': typeof PrivateAdminsIndexRoute
   '/applications': typeof PublicApplicationsIndexRoute
-  '/login': typeof PublicLoginIndexRoute
+  '/login': typeof PublicAuthLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_private': typeof PrivateRouteRouteWithChildren
+  '/_public/_auth': typeof PublicAuthRouteRouteWithChildren
   '/_public/applications': typeof PublicApplicationsRouteRouteWithChildren
   '/_private/$': typeof PrivateSplatRoute
   '/_private/dasboard': typeof PrivateDasboardRoute
@@ -94,7 +100,7 @@ export interface FileRoutesById {
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/_private/admins/': typeof PrivateAdminsIndexRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
-  '/_public/login/': typeof PublicLoginIndexRoute
+  '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_private'
+    | '/_public/_auth'
     | '/_public/applications'
     | '/_private/$'
     | '/_private/dasboard'
@@ -126,14 +133,14 @@ export interface FileRouteTypes {
     | '/_public/applications/teacher'
     | '/_private/admins/'
     | '/_public/applications/'
-    | '/_public/login/'
+    | '/_public/_auth/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
+  PublicAuthRouteRoute: typeof PublicAuthRouteRouteWithChildren
   PublicApplicationsRouteRoute: typeof PublicApplicationsRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
-  PublicLoginIndexRoute: typeof PublicLoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -173,11 +180,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicApplicationsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/login/': {
-      id: '/_public/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof PublicLoginIndexRouteImport
+    '/_public/_auth': {
+      id: '/_public/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicAuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/applications/': {
@@ -201,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicApplicationsTeacherRouteImport
       parentRoute: typeof PublicApplicationsRouteRoute
     }
+    '/_public/_auth/login/': {
+      id: '/_public/_auth/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof PublicAuthLoginIndexRouteImport
+      parentRoute: typeof PublicAuthRouteRoute
+    }
   }
 }
 
@@ -218,6 +232,18 @@ const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
 
 const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
   PrivateRouteRouteChildren,
+)
+
+interface PublicAuthRouteRouteChildren {
+  PublicAuthLoginIndexRoute: typeof PublicAuthLoginIndexRoute
+}
+
+const PublicAuthRouteRouteChildren: PublicAuthRouteRouteChildren = {
+  PublicAuthLoginIndexRoute: PublicAuthLoginIndexRoute,
+}
+
+const PublicAuthRouteRouteWithChildren = PublicAuthRouteRoute._addFileChildren(
+  PublicAuthRouteRouteChildren,
 )
 
 interface PublicApplicationsRouteRouteChildren {
@@ -238,9 +264,9 @@ const PublicApplicationsRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
+  PublicAuthRouteRoute: PublicAuthRouteRouteWithChildren,
   PublicApplicationsRouteRoute: PublicApplicationsRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
-  PublicLoginIndexRoute: PublicLoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
