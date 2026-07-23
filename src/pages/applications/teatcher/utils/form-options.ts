@@ -1,5 +1,6 @@
 import { formOptions } from '@tanstack/react-form'
 import type { AcademicItem } from '../schemas/academic.schema'
+import type { TeachingExperienceSchema } from '../schemas/teaching-experience.schema'
 
 
 
@@ -29,16 +30,7 @@ export const wizardFormOpts = formOptions({
       },
     ] as AcademicItem[],
 
-    experience: [
-      {
-        institution: '',
-        area: '',
-        role: '',
-        startYear: '',
-        endYear: '',
-      },
-    ],
-
+    experience: [{course:"",discipline:"",endYear:"", institution:"",startYear:""}] as TeachingExperienceSchema,
     documents: {
       cv: undefined as File | undefined,
       identificationDocument: undefined as File | undefined,

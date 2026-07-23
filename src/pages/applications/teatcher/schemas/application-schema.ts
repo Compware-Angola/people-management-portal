@@ -1,14 +1,14 @@
 import z from "zod";
 import { personalSchema } from "./personal.schema";
 import { academicSchema } from "./academic.schema";
-import { professionalExperienceSchema } from "./experience.schema";
 import { documentsSchema } from "./documents.schema";
+import { teachingExperienceSchema } from "./teaching-experience.schema";
 
 
 export const applicationSchema = z.object({
   personal: personalSchema,
   academic: academicSchema,
-  experience: professionalExperienceSchema,
+  experience: teachingExperienceSchema,
   documents: documentsSchema,
 
 });

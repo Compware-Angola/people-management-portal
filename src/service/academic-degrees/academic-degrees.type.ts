@@ -20,4 +20,5 @@ export type AcademicDegreeFilter = {
   page?: number
   limit?: number
   status?: number
+  ids?:number[]
 }

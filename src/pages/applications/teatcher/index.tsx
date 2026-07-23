@@ -2,17 +2,15 @@ import { useState } from 'react'
 import { revalidateLogic } from '@tanstack/react-form'
 import { Card, CardContent } from '@/components/ui/card'
 import { useAppForm } from '@/components/forms'
-
 import { StepsSidebar } from '../components/StepsSidebar'
 import { PersonalStep } from './components/personal-step'
 import { AcademicStep } from './components/academic-Step'
-import { ExperienceStep } from './components/experience-step'
 import { applicationSchema} from './schemas/application-schema'
 import type {ApplicationFormData} from './schemas/application-schema';
 import { DocumentsStep } from './components/documents-step'
-
 import { buildApplicationFormData, wizardFormOpts } from './utils'
 import { useCreateTeacherApplication } from '@/hooks/application'
+import { TeachingExperienceStep } from './components/experience'
 
 const steps = [
   { title: 'Dados pessoais' },
@@ -76,7 +74,7 @@ export function TeatcherApplicationPage() {
                 <AcademicStep form={form} step={step} setStep={setStep} />
               )}
               {step === 2 && (
-                <ExperienceStep form={form} step={step} setStep={setStep} />
+                <TeachingExperienceStep form={form} step={step} setStep={setStep} />
               )}
               {step === 3 && (
                 <DocumentsStep form={form} step={step} setStep={setStep} />

@@ -1,62 +1,66 @@
 import { withForm } from '@/components/forms'
-
 import {
-  Bookmark,
-  BarChart3,
+  BookOpen,
   Building2,
+  ClipboardList,
   Calendar,
   Trash2,
   Plus,
   GraduationCap,
 } from 'lucide-react'
-import { useAcademicDegreesQuery } from '@/hooks/academic-degrees'
-import { useCourseTrainingAreas } from '@/hooks/course-training-areas'
-import { academicSchema } from '../schemas/academic.schema'
+
+
 import { useEnsureMinArrayItems } from '../hooks/use-ensure-min-array-items'
 import { wizardFormOpts } from '../utils'
+import { teachingExperienceSchema } from '../schemas/teaching-experience.schema'
 
-const EMPTY_ACADEMIC_ITEM = {
+const EMPTY_TEACHING_EXPERIENCE_ITEM = {
   course: '',
-  academicLevel: '',
   institution: '',
-  completionYear: '',
+  discipline: '',
+  startYear: '',
+  endYear: '',
 }
 
-export const AcademicStep = withForm({
+export const TeachingExperienceStep = withForm({
   ...wizardFormOpts,
   props: {
-    step: 1,
-    setStep: (_step: number) => { },
+    step: 2,
+    setStep: (_step: number) => {},
   },
   render: function Render({ form, step, setStep }) {
-    const coursesQuery = useCourseTrainingAreas
-    const academicDegreesQuery = useAcademicDegreesQuery
     return (
       <form.FormGroup
-        name="academic"
-        validators={{ onDynamic: academicSchema }}
+        name="experience"
+        validators={{ onDynamic: teachingExperienceSchema }}
         onGroupSubmit={() => setStep(step + 1)}
       >
-        {(formGroup) => (
+        {(teachingExperienceGroup) => (
           <form
             onSubmit={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              formGroup.handleSubmit()
+              teachingExperienceGroup.handleSubmit()
             }}
             className="flex flex-col gap-6"
           >
             <div className="flex items-center justify-between border-b pb-4">
               <div className="flex items-center gap-2 text-neutral-700">
                 <GraduationCap className="size-5" />
-                <h2 className="text-sm font-semibold">Formação Académica</h2>
+                <h2 className="text-sm font-semibold">
+                  Experiência como Docente
+                </h2>
               </div>
 
-              <form.Field name="academic" mode="array">
-                {(academicField) => (
+              <form.Field name="experience" mode="array">
+                {(teachingExperienceField) => (
                   <button
                     type="button"
-                    onClick={() => academicField.pushValue(EMPTY_ACADEMIC_ITEM)}
+                    onClick={() =>
+                      teachingExperienceField.pushValue(
+                        EMPTY_TEACHING_EXPERIENCE_ITEM,
+                      )
+                    }
                     className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 active:bg-neutral-100"
                   >
                     <Plus className="size-3.5" />
@@ -65,13 +69,24 @@ export const AcademicStep = withForm({
                 )}
               </form.Field>
             </div>
-            <form.Field name="academic" mode="array">
-              {(academicField) => {
-                useEnsureMinArrayItems(academicField, EMPTY_ACADEMIC_ITEM)
+
+            <div className="flex items-start gap-2 rounded-md bg-blue-50 p-3 text-xs text-blue-700">
+              <span>
+                Obs.: Caso possua mais de uma experiência como docente, por
+                favor clique no botão adicionar.
+              </span>
+            </div>
+
+            <form.Field name="experience" mode="array">
+              {(teachingExperienceField) => {
+                useEnsureMinArrayItems(
+                  teachingExperienceField,
+                  EMPTY_TEACHING_EXPERIENCE_ITEM,
+                )
 
                 return (
                   <div className="flex flex-col gap-4">
-                    {academicField.state.value.map((_, index) => (
+                    {teachingExperienceField.state.value.map((_, index) => (
                       <div
                         key={index}
                         className="group relative rounded-xl border border-neutral-200 bg-white p-4 pr-12 shadow-sm transition-shadow hover:shadow-md md:p-5 md:pr-14"
@@ -80,65 +95,20 @@ export const AcademicStep = withForm({
                           {index + 1}
                         </span>
 
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                          <form.AppField name={`academic[${index}].course`}>
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+                          <form.AppField
+                            name={`experience[${index}].course`}
+                          >
                             {(field) => (
-                              <field.AsyncComboboxField
-                                label="Curso"
-                                placeholder="Selecione o curso"
-                                icon={Bookmark}
-                                useQuery={(search) => {
-                                  const query = coursesQuery({
-                                    search,
-                                    page: 1,
-                                    limit: 10,
-                                  })
 
-                                  return {
-                                    data:
-                                      query.data?.map((item) => ({
-                                        label: item.description,
-                                        value: String(item.id),
-                                      })) ?? [],
-                                    isLoading: query.isLoading,
-                                  }
-                                }}
-                              />
+                                
+                              <field.TextField label="Curso" icon={BookOpen} />
                             )}
                           </form.AppField>
 
                           <form.AppField
-                            name={`academic[${index}].academicLevel`}
+                            name={`experience[${index}].institution`}
                           >
-                            {(field) => (
-                              <field.AsyncComboboxField
-                                label="Nível académico"
-                                placeholder="Selecione o nível"
-                                icon={BarChart3}
-                                useQuery={(search) => {
-                                  const query = academicDegreesQuery({
-                                    search,
-                                    page: 1,
-                                    limit: 10,
-                                    status: 1,
-                                    ids:[2,3]
-
-                                  })
-
-                                  return {
-                                    data:
-                                      query.data?.map((item) => ({
-                                        label: item.description,
-                                        value: String(item.id),
-                                      })) ?? [],
-                                    isLoading: query.isLoading,
-                                  }
-                                }}
-                              />
-                            )}
-                          </form.AppField>
-
-                          <form.AppField name={`academic[${index}].institution`}>
                             {(field) => (
                               <field.TextField
                                 label="Instituição"
@@ -148,24 +118,49 @@ export const AcademicStep = withForm({
                           </form.AppField>
 
                           <form.AppField
-                            name={`academic[${index}].completionYear`}
+                            name={`experience[${index}].discipline`}
                           >
                             {(field) => (
                               <field.TextField
-                                label="Ano conclusão"
-                                type="number"
+                                label="Disciplina/Actividades"
+                                icon={ClipboardList}
+                              />
+                            )}
+                          </form.AppField>
+
+                          <form.AppField
+                            name={`experience[${index}].startYear`}
+                          >
+                            {(field) => (
+                              <field.TextField
+                                label="Ano de Início"
+                                type="date"
+                                icon={Calendar}
+                              />
+                            )}
+                          </form.AppField>
+
+                          <form.AppField
+                            name={`experience[${index}].endYear`}
+                          >
+                            {(field) => (
+                              <field.TextField
+                                label="Ano de Fim"
+                                type="date"
                                 icon={Calendar}
                               />
                             )}
                           </form.AppField>
                         </div>
 
-                        {academicField.state.value.length > 1 && (
+                        {teachingExperienceField.state.value.length > 1 && (
                           <button
                             type="button"
-                            onClick={() => academicField.removeValue(index)}
+                            onClick={() =>
+                              teachingExperienceField.removeValue(index)
+                            }
                             className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-2 text-red-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 md:top-5 md:translate-y-0"
-                            aria-label="Remover formação"
+                            aria-label="Remover experiência como docente"
                           >
                             <Trash2 className="size-5" />
                           </button>
@@ -177,7 +172,6 @@ export const AcademicStep = withForm({
               }}
             </form.Field>
 
-            {/* Ações */}
             <div className="flex col-span-full justify-between border-t pt-4">
               <button
                 type="button"
