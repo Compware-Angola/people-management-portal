@@ -5,6 +5,6 @@ export const DASHBOARD_NAV: NavItem[] = [
   {
     title: 'Dashboard',
     icon: LayoutDashboard,
-    url: '/',
+    url: '/dashboard',
   },
 ]

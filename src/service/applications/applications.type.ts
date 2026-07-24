@@ -59,6 +59,7 @@ export type ApplicationDocument= {
 
 export type MyApplication= {
   id: number
+  applicationDate?: string
   person: ApplicationPerson
   applicationStatus: ApplicationStatus | null
   academicDegree: ApplicationAcademicDegree | null

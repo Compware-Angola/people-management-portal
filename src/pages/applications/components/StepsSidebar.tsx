@@ -1,12 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { Boxes } from 'lucide-react'
-
-interface Step {
+type Step ={
   title: string
   optional?: boolean
 }
 
-interface StepsSidebarProps {
+type StepsSidebarProps ={
   steps: Step[]
   currentStep: number
 }
@@ -15,8 +13,8 @@ export function StepsSidebar({ steps, currentStep }: StepsSidebarProps) {
   return (
     <aside className="w-full hidden xl:flex xl:w-80 shrink-0 bg-background border-r border-border text-foreground flex flex-col p-6 xl:p-8 xl:h-screen xl:sticky xl:top-0 xl:self-start">
       <Link to='/' className="mb-14 flex items-center gap-2.5">
-        <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center shrink-0 shadow-sm shadow-primary/20">
-          <Boxes className="h-5 w-5 text-primary-foreground" />
+        <div className="h-10 w-10">
+          <img src="/logo.webp" alt="Logo" className="h-10 w-10" />
         </div>
         <div className="leading-tight">
           <span className="block text-sm font-semibold tracking-wide text-foreground">

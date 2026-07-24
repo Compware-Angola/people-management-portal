@@ -11,6 +11,9 @@ import { DocumentsStep } from './components/documents-step'
 import { buildApplicationFormData, wizardFormOpts } from './utils'
 import { useCreateTeacherApplication } from '@/hooks/application'
 import { TeachingExperienceStep } from './components/experience'
+import { Link } from '@tanstack/react-router'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 const steps = [
   { title: 'Dados pessoais' },
@@ -53,6 +56,12 @@ export function TeatcherApplicationPage() {
               style={{ width: `${progress}%` }}
             />
           </div>
+          <Link to="/">
+            <Button variant={"link"} className="mb-2">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Voltar
+            </Button>
+          </Link>
           <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             <span>
               Etapa {step + 1} de {steps.length}

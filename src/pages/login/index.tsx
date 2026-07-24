@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { GraduationCap } from 'lucide-react'
 import { LoginForm } from './login-form'
 
 export function LoginPage() {
@@ -15,15 +14,12 @@ export function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logótipo */}
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <GraduationCap className="h-6 w-6" />
+          <div className="flex h-30 w-60 items-center justify-center">
+            <img src="/logo_uma.webp" alt="Logo" className="h-30 w-60" />
           </div>
           <h1 className="mt-4 text-2xl font-semibold text-foreground">
             Entrar na Plataforma
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Acompanhe o estado da sua candidatura
-          </p>
         </div>
 
         {/* Cartão de login */}

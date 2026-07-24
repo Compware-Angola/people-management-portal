@@ -1,5 +1,5 @@
-import { useNavigate } from '@tanstack/react-router'
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { FileText, LogOut, User as UserIcon } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,10 +70,17 @@ export function UserMenu() {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <a href="/profile" className="cursor-pointer">
+          <Link to="/accounts/profile" className="cursor-pointer">
             <UserIcon className="mr-2 h-4 w-4" />
             Meu perfil
-          </a>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link to="/accounts/applications" className="cursor-pointer">
+            <FileText className="mr-2 h-4 w-4" />
+            Minha Candidatura
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

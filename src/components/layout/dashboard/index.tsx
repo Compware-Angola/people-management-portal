@@ -1,4 +1,4 @@
-import { ACCOUNT } from '@/config/menu-structure'
+import { ACCOUNT, DASHBOARD_NAV } from '@/config/menu-structure'
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +11,7 @@ import { NavMain } from './nav-main'
 import { DashboardSidebarHeader } from './sidebar-header'
 
 
+
 export function DashboardLayout({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
@@ -19,7 +20,8 @@ export function DashboardLayout({
       <Sidebar collapsible="icon" {...props}>
         <DashboardSidebarHeader />
         <SidebarContent>
-          <NavMain items={ACCOUNT} />
+          <NavMain items={DASHBOARD_NAV} groupLabel='Dashboard' />
+          <NavMain items={ACCOUNT} groupLabel='Conta' />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

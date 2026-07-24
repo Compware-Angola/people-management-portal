@@ -1,6 +1,6 @@
 import { useAppForm } from '@/components/forms'
 import { useLoginMutation } from '@/hooks/auth/use-auth'
-import { Link, useNavigate, useSearch } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { z } from 'zod'
 
 const loginSchema = z.object({
@@ -21,7 +21,7 @@ export function LoginForm() {
   function handleSubmit(values: LoginFormValues) {
     loginMutation.mutate(values, {
       onSuccess: () => {
-        navigate({ to: redirect ?? '/' })
+        navigate({ to: redirect ?? '/dashboard' })
       },
     })
   }
@@ -61,14 +61,14 @@ export function LoginForm() {
             <field.PasswordField label="Palavra-passe" placeholder="••••••••" />
           )}
         />
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Link
             to="/recover-account"
             className="text-sm font-medium text-primary transition-colors hover:text-primary/80"
           >
             Esqueceu-se da palavra-passe?
           </Link>
-        </div>
+        </div> */}
       </div>
 
       <form.AppForm>
