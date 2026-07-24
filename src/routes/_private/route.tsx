@@ -1,13 +1,28 @@
 import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { DashboardLayout } from '@/components/layout/dashboard'
+import { authStorage } from '@/lib/auth/auth-storage'
+import { currentUserQueryOptions } from '@/hooks/auth/use-auth'
 
 export const Route = createFileRoute('/_private')({
-  beforeLoad: ({ context, location }) => {
-    if (!context.authStorage.isAuthenticated()) {
+  beforeLoad: async ({ context, location }) => {
+    if (!authStorage.isAuthenticated()) {
       throw redirect({
-        to: "/login",
-        search: { redirect: location.href }
+        to: '/login',
+        search: { redirect: location.href },
       })
+    }
+    try {
+      const { isAuthenticated, user } = await context.queryClient.ensureQueryData(
+        currentUserQueryOptions(),
+      )
+      if (!isAuthenticated) {
+        authStorage.clear()
+        throw redirect({ to: '/login', search: { redirect: location.href } })
+      }
+      return { user }
+    } catch (error) {
+      authStorage.clear()
+      throw redirect({ to: '/login', search: { redirect: location.href } })
     }
   },
   component: RouteComponent,

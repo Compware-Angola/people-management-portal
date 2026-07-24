@@ -17,9 +17,9 @@ export type User = {
   codigo: number
   nome: string
   bi: string
-  nif: any
+  nif: string | null
   telefone: string
-  telefone_alternativo: any
+  telefone_alternativo: string | null
   provincia: string
   municipio: string
   morada: string
@@ -27,4 +27,10 @@ export type User = {
   precisa_mudar_senha: number
   estado: number
   criado_em: string
+}
+
+export type CurrentUserResponse = {
+  isAuthenticated: boolean
+  user: User
+  message: string
 }

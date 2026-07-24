@@ -1,6 +1,14 @@
 import { authApi } from "@/lib/api/auth-api";
-import type { LoginInput, LoginResponse } from "./type";
-
+import type { CurrentUserResponse, LoginInput, LoginResponse } from "./type";
+const platform = 'PEOPLE_MANAGEMENT'
 export async function login(params:LoginInput){
-  return  authApi.post("/auth/login",{json:{platform:"PEOPLE_MANAGEMENT",...params}}).json<LoginResponse>()
+  return  authApi.post("/auth/login",{json:{platform, ...params}}).json<LoginResponse>()
+}
+
+export function getCurrentUser(): Promise<CurrentUserResponse> {
+  return authApi
+    .get('auth/current-user', {
+      searchParams: { platform },
+    })
+    .json<CurrentUserResponse>()
 }
