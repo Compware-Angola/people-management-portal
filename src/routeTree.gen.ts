@@ -16,6 +16,7 @@ import { Route as PrivateDasboardRouteImport } from './routes/_private/dasboard'
 import { Route as PrivateSplatRouteImport } from './routes/_private/$'
 import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/applications/route'
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
+import { Route as PrivateProfileIndexRouteImport } from './routes/_private/profile/index'
 import { Route as PrivateAdminsIndexRouteImport } from './routes/_private/admins/index'
 import { Route as PublicApplicationsTeacherRouteImport } from './routes/_public/applications/teacher'
 import { Route as PublicAuthLoginIndexRouteImport } from './routes/_public/_auth/login/index'
@@ -53,6 +54,11 @@ const PublicApplicationsIndexRoute = PublicApplicationsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicApplicationsRouteRoute,
 } as any)
+const PrivateProfileIndexRoute = PrivateProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const PrivateAdminsIndexRoute = PrivateAdminsIndexRouteImport.update({
   id: '/admins/',
   path: '/admins/',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/dasboard': typeof PrivateDasboardRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins/': typeof PrivateAdminsIndexRoute
+  '/profile/': typeof PrivateProfileIndexRoute
   '/applications/': typeof PublicApplicationsIndexRoute
   '/login/': typeof PublicAuthLoginIndexRoute
 }
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/dasboard': typeof PrivateDasboardRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/admins': typeof PrivateAdminsIndexRoute
+  '/profile': typeof PrivateProfileIndexRoute
   '/applications': typeof PublicApplicationsIndexRoute
   '/login': typeof PublicAuthLoginIndexRoute
 }
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/_private/admins/': typeof PrivateAdminsIndexRoute
+  '/_private/profile/': typeof PrivateProfileIndexRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
   '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
 }
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/dasboard'
     | '/applications/teacher'
     | '/admins/'
+    | '/profile/'
     | '/applications/'
     | '/login/'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/dasboard'
     | '/applications/teacher'
     | '/admins'
+    | '/profile'
     | '/applications'
     | '/login'
   id:
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_public/applications/teacher'
     | '/_private/admins/'
+    | '/_private/profile/'
     | '/_public/applications/'
     | '/_public/_auth/login/'
   fileRoutesById: FileRoutesById
@@ -192,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicApplicationsIndexRouteImport
       parentRoute: typeof PublicApplicationsRouteRoute
     }
+    '/_private/profile/': {
+      id: '/_private/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof PrivateProfileIndexRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     '/_private/admins/': {
       id: '/_private/admins/'
       path: '/admins'
@@ -220,12 +239,14 @@ interface PrivateRouteRouteChildren {
   PrivateSplatRoute: typeof PrivateSplatRoute
   PrivateDasboardRoute: typeof PrivateDasboardRoute
   PrivateAdminsIndexRoute: typeof PrivateAdminsIndexRoute
+  PrivateProfileIndexRoute: typeof PrivateProfileIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateSplatRoute: PrivateSplatRoute,
   PrivateDasboardRoute: PrivateDasboardRoute,
   PrivateAdminsIndexRoute: PrivateAdminsIndexRoute,
+  PrivateProfileIndexRoute: PrivateProfileIndexRoute,
 }
 
 const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
