@@ -1,4 +1,4 @@
-import { PROFILE_NAV } from '@/config/menu-structure'
+import { ACCOUNT } from '@/config/menu-structure'
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +19,7 @@ export function DashboardLayout({
       <Sidebar collapsible="icon" {...props}>
         <DashboardSidebarHeader />
         <SidebarContent>
-          <NavMain items={PROFILE_NAV} />
+          <NavMain items={ACCOUNT} />
         </SidebarContent>
         <SidebarRail />
       </Sidebar>

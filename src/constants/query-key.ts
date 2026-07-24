@@ -5,4 +5,5 @@ export const QUERY_KEY = {
   nationalities: 'nationalities',
   coursesTrainingAreas: 'course-training-areas',
   academicDegrees: 'academic-degrees',
+  applications: 'applications'
 } as const

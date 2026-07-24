@@ -1,3 +1,3 @@
 export * from './dashboard'
 export * from './employees'
-export * from './perfil'
+export * from './account-nav'
