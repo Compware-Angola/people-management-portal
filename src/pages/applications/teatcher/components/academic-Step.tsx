@@ -124,7 +124,6 @@ export const AcademicStep = withForm({
                                     ids:[2,3]
 
                                   })
-
                                   return {
                                     data:
                                       query.data?.map((item) => ({

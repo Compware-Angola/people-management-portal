@@ -21,6 +21,10 @@ export function useCreateTeacherApplication() {
     mutationFn: createTeacherApplication,
     onError:(error)=> {
         toast.error(getApiErrorMessage(error))
+    },
+    onSuccess: ({message}) => {
+        toast.success(message)
+        toast.success("Enviamos um email para confirmar a sua inscrição!")
     }
   });
   
