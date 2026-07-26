@@ -8,10 +8,6 @@ export function buildApplicationFormData(
   const formData = new FormData()
 
 
-  /**
-   * JSON
-   */
-
   formData.append(
     'personal',
     JSON.stringify(data.personal),
@@ -30,9 +26,6 @@ export function buildApplicationFormData(
   )
 
 
-  /**
-   * Files
-   */
 
   formData.append(
     'cv',

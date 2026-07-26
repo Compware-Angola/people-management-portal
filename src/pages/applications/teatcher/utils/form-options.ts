@@ -2,8 +2,6 @@ import { formOptions } from '@tanstack/react-form'
 import type { AcademicItem } from '../schemas/academic.schema'
 import type { TeachingExperienceSchema } from '../schemas/teaching-experience.schema'
 
-
-
 export const wizardFormOpts = formOptions({
   defaultValues: {
     personal: {

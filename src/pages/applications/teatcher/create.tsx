@@ -11,7 +11,7 @@ import { DocumentsStep } from './components/documents-step'
 import { buildApplicationFormData, wizardFormOpts } from './utils'
 import { useCreateTeacherApplication } from '@/hooks/application'
 import { TeachingExperienceStep } from './components/experience'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 
@@ -23,6 +23,7 @@ const steps = [
 ]
 
 export function TeatcherApplicationPage() {
+  const navigate = useNavigate()
   const [step, setStep] = useState(0)
   
   const {mutateAsync:createTeacherApp} = useCreateTeacherApplication()
@@ -36,9 +37,11 @@ export function TeatcherApplicationPage() {
     onSubmit: async ({ value }) => {
      
       const data = buildApplicationFormData(value as ApplicationFormData )
-       console.log(data)
-    await createTeacherApp({data})
      
+    await createTeacherApp({data})
+    form.reset()
+    navigate({ to: '/login' })
+    
     },
   })
 
