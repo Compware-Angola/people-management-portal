@@ -13,17 +13,7 @@ export function DashboardSidebarHeader() {
           !open ? 'justify-center px-0' : 'px-5',
         )}
       >
-        <img src="/logo.webp" className="size-6 " />
-        {open && (
-          <div className="flex flex-col min-w-25 animate-in fade-in slide-in-from-left-2 duration-300">
-            <p className="text-foreground text-sm font-bold tracking-tight">
-              Universidade Metodista
-            </p>
-            <p className="text-primary text-xs font-medium opacity-80">
-              Portal de Gestão de Pessoas
-            </p>
-          </div>
-        )}
+        <img src="/logo_uma.webp" className="h-18 w-auto object-contain" />
       </Link>
     </SidebarHeader>
   )

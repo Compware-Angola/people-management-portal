@@ -11,28 +11,18 @@ type StepsSidebarProps ={
 
 export function StepsSidebar({ steps, currentStep }: StepsSidebarProps) {
   return (
-    <aside className="w-full hidden xl:flex xl:w-80 shrink-0 bg-background border-r border-border text-foreground flex flex-col p-6 xl:p-8 xl:h-screen xl:sticky xl:top-0 xl:self-start">
+    <aside className="w-full hidden xl:flex xl:w-80 shrink-0 bg-background border-r border-border text-foreground  flex-col p-6 xl:p-8 xl:h-screen xl:sticky xl:top-0 xl:self-start">
       <Link to='/' className="mb-14 flex items-center gap-2.5">
-        <div className="h-10 w-10">
-          <img src="/logo.webp" alt="Logo" className="h-10 w-10" />
-        </div>
-        <div className="leading-tight">
-          <span className="block text-sm font-semibold tracking-wide text-foreground">
-            UMA
-          </span>
-          <span className="block text-[11px] text-muted-foreground">
-            Universidade Metodista de Angola
-          </span>
-        </div>
+        <img src="/logo_uma.webp" alt="Universidade Metodista de Angola" className="h-40 w-60 object-contain" />
       </Link>
       <nav className="flex-1">
         <ol className="relative pl-1">
           <span
-            className="absolute left-[5px] top-1 bottom-1 w-px bg-border"
+            className="absolute left-1.25 top-1 bottom-1 w-px bg-border"
             aria-hidden="true"
           />
           <span
-            className="absolute left-[5px] top-1 w-px bg-primary transition-all duration-500 ease-out"
+            className="absolute left-1.25 top-1 w-px bg-primary transition-all duration-500 ease-out"
             style={{
               height: `${(currentStep / (steps.length - 1)) * 100}%`,
             }}

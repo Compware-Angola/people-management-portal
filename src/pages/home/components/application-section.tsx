@@ -1,10 +1,10 @@
-import { Briefcase, GraduationCap } from 'lucide-react'
+import { GraduationCap } from 'lucide-react'
 import { ApplicationCard } from './application-card'
 
 export function ApplicationSection() {
   return (
     <section  id="application">
-      <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+      <div className="flex justify-center mx-auto">
         <ApplicationCard
           to="/applications/teacher"
           icon={<GraduationCap className="h-6 w-6" />}
@@ -19,7 +19,7 @@ export function ApplicationSection() {
           cta="Candidatar-me como Professor"
         />
 
-        <ApplicationCard
+        {/* <ApplicationCard
           to="/applications"
           icon={<Briefcase className="h-6 w-6" />}
           eyebrow="Corpo Profissional"
@@ -31,7 +31,7 @@ export function ApplicationSection() {
             'Submissão rápida',
           ]}
           cta="Candidatar-me como Profissional"
-        />
+        /> */}
       </div>
     </section>
   )
