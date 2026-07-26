@@ -7,8 +7,6 @@ export async function login(params:LoginInput){
 
 export function getCurrentUser(): Promise<CurrentUserResponse> {
   return authApi
-    .get('auth/current-user', {
-      searchParams: { platform },
-    })
+    .get('auth/current-user', {searchParams: { platform }, })
     .json<CurrentUserResponse>()
 }
