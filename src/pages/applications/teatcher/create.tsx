@@ -76,7 +76,7 @@ export function TeatcherApplicationPage() {
           </h1>
           <Card
             key={step}
-            className="mt-6 border-border/60 shadow-sm shadow-black/[0.03] animate-in fade-in slide-in-from-bottom-1 duration-300"
+            className="mt-6 border-border/60 shadow-sm shadow-black/3 animate-in fade-in slide-in-from-bottom-1 duration-300"
           >
             <CardContent className="p-6 lg:p-8">
               {step === 0 && (

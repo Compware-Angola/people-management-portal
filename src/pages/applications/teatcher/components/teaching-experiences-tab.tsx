@@ -5,6 +5,7 @@ import type { MyApplication } from '@/service/applications/applications.type'
 import { z } from 'zod'
 import { useUpdateTeachingExperiences } from '@/hooks/application'
 import { teachingExperienceItemSchema } from '../schemas/teaching-experience.schema'
+import { cn } from '@/lib/utils'
 
 const experienceListSchema = z.object({
   items: z.array(teachingExperienceItemSchema),
@@ -67,8 +68,9 @@ export function TeachingExperiencesTab({
           {(itemsField) => (
             <button
               type="button"
+              disabled={itemsField.state.value.length >= 10}
               onClick={() => itemsField.pushValue(EMPTY_ITEM)}
-              className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 active:bg-neutral-100"
+              className={cn("inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 active:bg-neutral-100", itemsField.state.value.length >= 10 && "opacity-50 cursor-not-allowed")}
             >
               <Plus className="size-3.5" />
               Adicionar

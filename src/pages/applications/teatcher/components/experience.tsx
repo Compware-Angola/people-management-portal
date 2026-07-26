@@ -13,6 +13,7 @@ import {
 import { useEnsureMinArrayItems } from '../hooks/use-ensure-min-array-items'
 import { wizardFormOpts } from '../utils'
 import { teachingExperienceSchema } from '../schemas/teaching-experience.schema'
+import { cn } from '@/lib/utils'
 
 const EMPTY_TEACHING_EXPERIENCE_ITEM = {
   course: '',
@@ -56,12 +57,13 @@ export const TeachingExperienceStep = withForm({
                 {(teachingExperienceField) => (
                   <button
                     type="button"
+                    disabled={teachingExperienceField.state.value.length >= 10}
                     onClick={() =>
                       teachingExperienceField.pushValue(
                         EMPTY_TEACHING_EXPERIENCE_ITEM,
                       )
                     }
-                    className="inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 active:bg-neutral-100"
+                    className={cn("inline-flex items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50 active:bg-neutral-100", teachingExperienceField.state.value.length >= 10 && "opacity-50 cursor-not-allowed")}
                   >
                     <Plus className="size-3.5" />
                     Adicionar
