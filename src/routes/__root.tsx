@@ -1,20 +1,169 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
+import { FormDevtoolsPanel } from '@tanstack/react-form-devtools'
 import '../styles.css'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { Toaster } from 'sonner'
+import { authStorage } from '@/lib/auth/auth-storage'
+import { QueryClient } from '@tanstack/react-query'
 
-export const Route = createRootRoute({
+interface RouterContext {
+  queryClient: QueryClient
+  authStorage: typeof authStorage
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
+
+  head: () => ({
+    title: 'Portal do Colaborador',
+
+    meta: [
+      {
+        charSet: 'UTF-8',
+      },
+      {
+        httpEquiv: 'X-UA-Compatible',
+        content: 'IE=edge',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
+      },
+      {
+        name: 'description',
+        content: 'Portal do Colaborador',
+      },
+      {
+        name: 'keywords',
+        content: 'Portal do Colaborador',
+      },
+      {
+        name: 'author',
+        content: 'Compware',
+      },
+      {
+        name: 'robots',
+        content: 'index,follow',
+      },
+      {
+        name: 'theme-color',
+        content: '#eb2c25ff',
+      },
+      {
+        name: 'color-scheme',
+        content: 'light dark',
+      },
+
+      // Open Graph
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:locale',
+        content: 'pt_PT',
+      },
+      {
+        property: 'og:site_name',
+        content: 'Portal do Colaborador',
+      },
+      {
+        property: 'og:title',
+        content: 'Portal do Colaborador',
+      },
+      {
+        property: 'og:description',
+        content: 'Portal do Colaborador',
+      },
+      {
+        property: 'og:image',
+        content: '/logo_uma.webp',
+      },
+      {
+        property: 'og:url',
+        content: 'https://teudominio.com/',
+      },
+
+      // Twitter
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:title',
+        content: 'Portal do Colaborador',
+      },
+      {
+        name: 'twitter:description',
+        content: 'Portal do Colaborador',
+      },
+      {
+        name: 'twitter:image',
+        content: '/logo_uma.webp',
+      },
+      {
+        name: 'twitter:url',
+        content: 'https://teudominio.com/',
+      },
+
+      // Microsoft
+      {
+        name: 'msapplication-TileColor',
+        content: '#2563eb',
+      },
+      {
+        name: 'msapplication-config',
+        content: '/browserconfig.xml',
+      },
+    ],
+
+    links: [
+      {
+        rel: 'icon',
+        href: '/favicon.ico',
+        sizes: 'any',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'canonical',
+        href: 'https://teudominio.com/',
+      },
+      {
+        rel: 'manifest',
+        href: '/manifest.webmanifest',
+      },
+    ],
+  }),
 })
 
 function RootComponent() {
   return (
     <>
-     <TooltipProvider>
-      <Outlet />
+      <HeadContent />
+
+      <TooltipProvider>
+        <Outlet />
+        <Toaster richColors position="bottom-right" closeButton />
       </TooltipProvider>
+
       <TanStackDevtools
         config={{
           position: 'bottom-right',
@@ -23,6 +172,14 @@ function RootComponent() {
           {
             name: 'TanStack Router',
             render: <TanStackRouterDevtoolsPanel />,
+          },
+          {
+            name: 'TanStack Query',
+            render: <ReactQueryDevtoolsPanel />,
+          },
+          {
+            name: 'TanStack Form',
+            render: <FormDevtoolsPanel />,
           },
         ]}
       />
