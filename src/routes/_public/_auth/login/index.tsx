@@ -1,5 +1,5 @@
 // routes/_public/_auth/login/index.tsx (ou onde quer que esteja)
-import { LoginPage } from '@/pages/login'
+import { LoginPage } from '@/pages/auth/login'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 

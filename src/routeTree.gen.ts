@@ -19,6 +19,7 @@ import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/ap
 import { Route as PublicApplicationsTeacherRouteImport } from './routes/_public/applications/teacher'
 import { Route as PrivateAccountsProfileRouteImport } from './routes/_private/accounts/profile'
 import { Route as PrivateAccountsApplicationsRouteImport } from './routes/_private/accounts/applications'
+import { Route as PublicAuthRecoverAccountIndexRouteImport } from './routes/_public/_auth/recover-account/index'
 import { Route as PublicAuthLoginIndexRouteImport } from './routes/_public/_auth/login/index'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -71,6 +72,12 @@ const PrivateAccountsApplicationsRoute =
     path: '/accounts/applications',
     getParentRoute: () => PrivateRouteRoute,
   } as any)
+const PublicAuthRecoverAccountIndexRoute =
+  PublicAuthRecoverAccountIndexRouteImport.update({
+    id: '/_auth/recover-account/',
+    path: '/recover-account/',
+    getParentRoute: () => PublicRouteRoute,
+  } as any)
 const PublicAuthLoginIndexRoute = PublicAuthLoginIndexRouteImport.update({
   id: '/_auth/login/',
   path: '/login/',
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/applications/': typeof PublicApplicationsIndexRoute
   '/login/': typeof PublicAuthLoginIndexRoute
+  '/recover-account/': typeof PublicAuthRecoverAccountIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -97,6 +105,7 @@ export interface FileRoutesByTo {
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/applications': typeof PublicApplicationsIndexRoute
   '/login': typeof PublicAuthLoginIndexRoute
+  '/recover-account': typeof PublicAuthRecoverAccountIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -111,6 +120,7 @@ export interface FileRoutesById {
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
   '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
+  '/_public/_auth/recover-account/': typeof PublicAuthRecoverAccountIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/applications/teacher'
     | '/applications/'
     | '/login/'
+    | '/recover-account/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/applications/teacher'
     | '/applications'
     | '/login'
+    | '/recover-account'
   id:
     | '__root__'
     | '/_private'
@@ -147,6 +159,7 @@ export interface FileRouteTypes {
     | '/_public/applications/teacher'
     | '/_public/applications/'
     | '/_public/_auth/login/'
+    | '/_public/_auth/recover-account/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateAccountsApplicationsRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
+    '/_public/_auth/recover-account/': {
+      id: '/_public/_auth/recover-account/'
+      path: '/recover-account'
+      fullPath: '/recover-account/'
+      preLoaderRoute: typeof PublicAuthRecoverAccountIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/_auth/login/': {
       id: '/_public/_auth/login/'
       path: '/login'
@@ -274,12 +294,14 @@ interface PublicRouteRouteChildren {
   PublicApplicationsRouteRoute: typeof PublicApplicationsRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
   PublicAuthLoginIndexRoute: typeof PublicAuthLoginIndexRoute
+  PublicAuthRecoverAccountIndexRoute: typeof PublicAuthRecoverAccountIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicApplicationsRouteRoute: PublicApplicationsRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
   PublicAuthLoginIndexRoute: PublicAuthLoginIndexRoute,
+  PublicAuthRecoverAccountIndexRoute: PublicAuthRecoverAccountIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
