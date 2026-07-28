@@ -21,3 +21,11 @@ export async function getApiErrorMessage(error: unknown): Promise<string> {
   }
   return 'Ocorreu um erro inesperado. Tente novamente.'
 }
+
+export  function parseError(error: unknown)  {
+   if (error instanceof HTTPError) {
+   const body =  error.data as ApiErrorBody
+   return body
+   }
+ return  null
+}

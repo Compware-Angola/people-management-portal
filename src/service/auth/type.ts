@@ -34,3 +34,12 @@ export type CurrentUserResponse = {
   user: User
   message: string
 }
+
+export type CheckEmailInput = {
+  email: string
+}
+
+export type CheckEmailResponse = {
+  email: string
+  exists: boolean
+}
