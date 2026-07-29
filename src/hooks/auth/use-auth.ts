@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react"
 import { authStorage } from "@/lib/auth/auth-storage"
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { checkEmail, getCurrentUser, login, requestPasswordReset,resetPassword } from "@/service/auth/auth.service"
+import { checkEmail, getCurrentUser, login, requestPasswordReset,resetPassword, sendRenewDataRequest } from "@/service/auth/auth.service"
 import { toast } from "sonner"
 import { getApiErrorMessage, parseError } from "@/lib/api/get-api-error-message"
 import { useNavigate } from "@tanstack/react-router"
@@ -80,4 +80,16 @@ export function useRequestPasswordResetMutation() {
 
 export function useResetPasswordMutation() {
   return useMutation({mutationFn:resetPassword, onError:(error)=>{ toast.error(getApiErrorMessage(error))}})
+}
+
+export function useSendRenewDataRequest() {
+  return useMutation({
+    mutationFn: sendRenewDataRequest,
+    onSuccess: () => {
+      toast.success('Solicitação enviada com sucesso.')
+    },
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error))
+    },
+  })
 }

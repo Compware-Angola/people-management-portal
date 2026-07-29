@@ -25,13 +25,11 @@ export function RecoverAccountRequestDialog({
                     <DialogTitle>
                         A sua conta pode ainda não estar disponível.
                     </DialogTitle>
-
                     <DialogDescription>
                         Preencha os dados abaixo para solicitar a atualização dos seus dados.
                         Um administrador irá analisar o pedido e, após a validação, poderá concluir a recuperação do acesso à sua conta.
                     </DialogDescription>
                 </DialogHeader>
-
                 <RecoverAccountRequestForm />
             </DialogContent>
         </Dialog>

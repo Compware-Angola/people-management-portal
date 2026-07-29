@@ -1,5 +1,6 @@
 import { authApi } from "@/lib/api/auth-api";
 import type { CheckEmailInput, CheckEmailResponse, CurrentUserResponse, LoginInput, LoginResponse } from "./type";
+import { mailifyApi } from "@/lib/api/mailify.api";
 const platform = 'PEOPLE_MANAGEMENT'
 export async function login(params:LoginInput){
   return  authApi.post("/auth/login",{json:{platform, ...params}}).json<LoginResponse>()
@@ -36,3 +37,29 @@ export async function resetPassword({newPassword,token}:{token:string, newPasswo
       json: { token, newPassword, platform: platformPortal},
     })
 }
+
+export type RequestDataUpdate = {
+  fullName: string
+  email: string
+  documentNumber: string
+  phone?: string
+  details: string
+}
+
+export async function sendRenewDataRequest(payload: RequestDataUpdate) {
+  await mailifyApi.post('send-email', {
+    json: {
+      subject: 'Solicitação de Recuperação de Acesso ao Portal de Candidaturas',
+      company: 'universidade_metodista_angola',
+      type: 'solicitar_actualizacao_dados_candidatura_portal_colaborador',
+      context: {
+        fullName: payload.fullName,
+        email: payload.email,
+        documentNumber: payload.documentNumber,
+        phone: payload.phone,
+        details: payload.details,
+      },
+    },
+  })
+}
+
