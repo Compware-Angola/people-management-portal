@@ -30,7 +30,7 @@ export function RecoverAccountRequestDialog({
                         Um administrador irá analisar o pedido e, após a validação, poderá concluir a recuperação do acesso à sua conta.
                     </DialogDescription>
                 </DialogHeader>
-                <RecoverAccountRequestForm />
+                <RecoverAccountRequestForm onSuccess={() => onOpenChange(false)} />
             </DialogContent>
         </Dialog>
     )

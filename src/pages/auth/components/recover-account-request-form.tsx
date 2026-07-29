@@ -1,7 +1,9 @@
 import { useAppForm } from '@/components/forms'
 import { useSendRenewDataRequest } from '@/hooks/auth/use-auth'
 import { z } from 'zod'
-
+type RecoverAccountRequestFormProps = {
+    onSuccess?: () => void
+}
 const recoverAccountRequestSchema = z.object({
     fullName: z
         .string()
@@ -24,7 +26,7 @@ export type RecoverAccountRequestFormValues = z.infer<
     typeof recoverAccountRequestSchema
 >
 
-export function RecoverAccountRequestForm() {
+export function RecoverAccountRequestForm({ onSuccess }: RecoverAccountRequestFormProps) {
     const sendRenewDataRequestMutation = useSendRenewDataRequest()
 
     const form = useAppForm({
@@ -48,6 +50,8 @@ export function RecoverAccountRequestForm() {
                 phone: value.phone,
                 details: value.reason,
             })
+            onSuccess && onSuccess()
+            form.reset()
         },
     })
 
