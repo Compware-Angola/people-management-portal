@@ -7,8 +7,6 @@ import {
 } from '@/components/ui/dialog'
 import { RecoverAccountRequestForm } from './recover-account-request-form'
 
-
-
 type Props = {
     open: boolean
     onOpenChange: (open: boolean) => void
