@@ -1,6 +1,7 @@
 import { authApi } from "@/lib/api/auth-api";
 import type { CheckEmailInput, CheckEmailResponse, CurrentUserResponse, LoginInput, LoginResponse } from "./type";
 import { mailifyApi } from "@/lib/api/mailify.api";
+
 const platform = 'PEOPLE_MANAGEMENT'
 export async function login(params:LoginInput){
   return  authApi.post("/auth/login",{json:{platform, ...params}}).json<LoginResponse>()

@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { FileText, Upload, Download, CheckCircle2 } from 'lucide-react'
+import { FileText, Upload, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getDocumentTypeLabel } from './document-type-labels'
 import type { MyApplication } from '@/service/applications/applications.type'
 import { useUploadDocument } from '@/hooks/application'
+import { DownloadFileButton } from '@/components/download/download-button'
 
 interface DocumentsTabProps {
   application: MyApplication
@@ -61,32 +62,35 @@ function DocumentRow({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          id={`file-${documentTypeId}`}
-          type="file"
-          accept=".pdf,.jpg,.png"
-          className="hidden"
-          onChange={handleFileChange}
-        />
-        <label
-          htmlFor={`file-${documentTypeId}`}
-          className="cursor-pointer rounded-md border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
-        >
-          {selectedFile ? selectedFile.name : 'Escolher ficheiro'}
-        </label>
+  <div className="flex items-center gap-2">
+  <input
+    id={`file-${documentTypeId}`}
+    type="file"
+    accept=".pdf,.jpg,.png"
+    className="hidden"
+    onChange={handleFileChange}
+  />
 
-        <Button
-          type="button"
-          size="sm"
-          disabled={!selectedFile || uploadMutation.isPending}
-          onClick={handleUpload}
-        >
-          <Upload className="mr-1 h-3.5 w-3.5" />
-          {uploadMutation.isPending ? 'A enviar...' : 'Enviar'}
-        </Button>
-      </div>
-    </div>
+  <label
+    htmlFor={`file-${documentTypeId}`}
+    className="cursor-pointer rounded-md border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
+  >
+    {selectedFile ? selectedFile.name : "Escolher ficheiro"}
+  </label>
+
+  <Button
+    type="button"
+    size="sm"
+    disabled={!selectedFile || uploadMutation.isPending}
+    onClick={handleUpload}
+  >
+    <Upload className="mr-1 h-3.5 w-3.5" />
+    {uploadMutation.isPending ? "A enviar..." : "Enviar"}
+  </Button>
+
+  {fileName && <DownloadFileButton path={fileName} />}
+</div>
+</div>
   )
 }
 
