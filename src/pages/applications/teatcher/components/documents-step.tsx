@@ -28,7 +28,7 @@ export const DocumentsStep = withForm({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <form.AppField name="documents.identificationDocument">
                 {(field) => (
-                  <field.FileField
+                  <field.UploadFileField
                     label="BI/PASSAPORTE(*)"
                     accept=".pdf,.jpg,.png"
 
@@ -38,7 +38,7 @@ export const DocumentsStep = withForm({
               </form.AppField>
               <form.AppField name="documents.courseCertificate">
                 {(field) => (
-                  <field.FileField
+                  <field.UploadFileField
                     label="Certificado INAREES (*)"
                     accept=".pdf,.jpg,.png"
                   />
@@ -48,7 +48,7 @@ export const DocumentsStep = withForm({
 
               <form.AppField name="documents.cv">
                 {(field) => (
-                  <field.FileField
+                  <field.UploadFileField
                     label="Curriculum(*)"
                     accept=".pdf,.doc,.docx"
                   />
@@ -57,7 +57,7 @@ export const DocumentsStep = withForm({
 
               <form.AppField name="documents.pedagogicalAggregation">
                 {(field) => (
-                  <field.FileField
+                  <field.UploadFileField
                     label="Agregação Pedagógica (*)"
                     accept=".pdf,.jpg,.png"
                   />
@@ -68,7 +68,7 @@ export const DocumentsStep = withForm({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <form.AppField name="documents.certificates">
                 {(field) => (
-                  <field.FileField
+                  <field.UploadFileField
                     label="Diplomas(*)"
                     accept=".pdf,.jpg,.png"
                     multiple

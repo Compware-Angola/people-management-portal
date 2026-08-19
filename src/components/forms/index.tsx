@@ -7,6 +7,7 @@ import { OTPField } from './otp-field'
 import { AsyncComboboxField, ComboboxField } from './combobox-field'
 import { SelectField } from './select-field'
 import { FileField } from './file-field'
+import { UploadFileField } from './upload-file-field'
 import { SubscribeButton } from './subscribe-button'
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
@@ -25,6 +26,7 @@ export const { useAppForm, withForm } = createFormHook({
     SelectField,
     ComboboxField,
     FileField,
+    UploadFileField,
   },
   formComponents: {
     SubscribeButton,

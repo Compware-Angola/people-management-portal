@@ -12,6 +12,9 @@ import { useMaritalStatusQuery } from '@/hooks/marital-status'
 import { useDocumentTypesQuery } from '@/hooks/document-types'
 import { useGendersQuery } from '@/hooks/genders'
 import { useNationalitiesQuery } from '@/hooks/nationalities'
+import { useCheckPersonalUniqueness } from '@/hooks/application'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 
 import { personalSchema } from '../schemas/personal.schema'
 import { Header } from './header'
@@ -29,11 +32,52 @@ export const PersonalStep = withForm({
     const documentTypesQuery = useDocumentTypesQuery
     const gendersQuery = useGendersQuery
     const nationalitiesQuery = useNationalitiesQuery
+    const { mutateAsync: checkPersonalUniqueness } = useCheckPersonalUniqueness()
 
     return (
       <form.FormGroup
         name="personal"
-        validators={{ onDynamic: personalSchema }}
+        validators={{
+          onDynamic: personalSchema,
+          onSubmitAsync: async ({ value }) => {
+            let result
+            try {
+              result = await checkPersonalUniqueness(value)
+            } catch {
+              // se a verificação de duplicidade falhar (ex.: rede), não
+              // bloqueia o avanço — o submit final da candidatura continua a
+              // validar duplicidade como rede de segurança
+              return undefined
+            }
+
+            const fields: Record<string, { message: string }> = {}
+            if (result.emailTaken) {
+              fields.email = {
+                message:
+                  'Este e-mail já está associado a um candidato cadastrado.',
+              }
+            }
+            if (result.documentNumberTaken) {
+              fields.documentNumber = {
+                message: `Este número de ${result.documentTypeName ?? 'documento'} já está associado a um candidato cadastrado.`,
+              }
+            }
+            if (result.phoneTaken) {
+              fields.phone = {
+                message:
+                  'Este número de telefone já está associado a um candidato cadastrado.',
+              }
+            }
+            if (result.alternativePhoneSameAsPhone) {
+              fields.alternativePhone = {
+                message:
+                  'O telefone alternativo não pode ser igual ao telefone principal.',
+              }
+            }
+
+            return Object.keys(fields).length ? { fields } : undefined
+          },
+        }}
         onGroupSubmit={() => setStep(step + 1)}
       >
         {(formGroup) => (
@@ -218,9 +262,9 @@ export const PersonalStep = withForm({
 
             {/* ACTION */}
             <div className="flex col-span-full justify-end pt-4">
-              <form.AppForm>
-                <form.SubscribeButton label="Continuar" />
-              </form.AppForm>
+              <Button type="submit" disabled={formGroup.state.meta.isSubmitting}>
+                {formGroup.state.meta.isSubmitting ? <Spinner /> : 'Continuar'}
+              </Button>
             </div>
           </form>
         )}

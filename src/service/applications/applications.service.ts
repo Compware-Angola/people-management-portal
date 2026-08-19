@@ -1,4 +1,6 @@
 import type {
+  CheckPersonalUniquenessPayload,
+  CheckPersonalUniquenessResponse,
   CreateTeacherApplicationRequest,
   CreateTeacherApplicationResponse,
   MyApplication,
@@ -10,9 +12,17 @@ import { gpApi } from '@/lib/api/gp.api'
 export function createTeacherApplication({ data }: CreateTeacherApplicationRequest) {
   return gpApi
     .post('applications/teachers', {
-      body: data,
+      json: data,
     })
     .json<CreateTeacherApplicationResponse>();
+}
+
+export function checkPersonalUniqueness(personal: CheckPersonalUniquenessPayload) {
+  return gpApi
+    .post('applications/teachers/check-personal', {
+      json: personal,
+    })
+    .json<CheckPersonalUniquenessResponse>()
 }
 
 export function getMyApplication() {
@@ -53,4 +63,20 @@ export function uploadDocument(
   return gpApi
     .post(`applications/${candidateId}/documents`, { body: formData })
     .json<MyApplication>()
+}
+
+export type RegisterDocumentPayload = {
+  candidateId: number
+  documentTypeId: number
+  key: string
+}
+
+export function registerDocument({ candidateId, documentTypeId, key }: RegisterDocumentPayload) {
+  return gpApi.post(`applications/${candidateId}/documents/register`, {
+    json: { documentTypeId, key }
+  }).json<MyApplication>()
+}
+
+export function renewApplication(candidateId: number) {
+  return gpApi.post(`applications/${candidateId}/renew`).json<MyApplication>()
 }

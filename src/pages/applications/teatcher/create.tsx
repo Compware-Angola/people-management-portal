@@ -8,12 +8,14 @@ import { AcademicStep } from './components/academic-Step'
 import { applicationSchema} from './schemas/application-schema'
 import type {ApplicationFormData} from './schemas/application-schema';
 import { DocumentsStep } from './components/documents-step'
-import { buildApplicationFormData, wizardFormOpts } from './utils'
+import { buildApplicationPayload, wizardFormOpts } from './utils'
 import { useCreateTeacherApplication } from '@/hooks/application'
+import { useDeleteFile } from '@/hooks/upload/use-download'
 import { TeachingExperienceStep } from './components/experience'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import { toast } from 'sonner'
 
 const steps = [
   { title: 'Dados pessoais' },
@@ -27,6 +29,7 @@ export function TeatcherApplicationPage() {
   const [step, setStep] = useState(0)
   
   const {mutateAsync:createTeacherApp} = useCreateTeacherApplication()
+  const { mutateAsync: deleteFile } = useDeleteFile()
 
   const form = useAppForm({
     ...wizardFormOpts,
@@ -35,13 +38,40 @@ export function TeatcherApplicationPage() {
       onDynamic: applicationSchema,
     },
     onSubmit: async ({ value }) => {
-     
-      const data = buildApplicationFormData(value as ApplicationFormData )
-     
-    await createTeacherApp({data})
-    form.reset()
-    navigate({ to: '/login' })
-    
+      const data = buildApplicationPayload(value as ApplicationFormData)
+
+      try {
+        await createTeacherApp({ data })
+        form.reset()
+        navigate({ to: '/login' })
+      } catch (error) {
+        const documents = (value as ApplicationFormData).documents
+        const uploadedKeys = [
+          documents.identificationDocument,
+          documents.cv,
+          documents.courseCertificate,
+          documents.pedagogicalAggregation,
+          ...documents.certificates,
+        ].filter(Boolean)
+
+        await Promise.allSettled(uploadedKeys.map((key) => deleteFile(key)))
+
+        // as keys acima já foram apagadas do storage — limpa também o valor
+        // do form para que o UploadFileField pare de as mostrar como
+        // "enviadas" e obrigue o utilizador a anexar os documentos de novo
+        // antes de tentar submeter outra vez.
+        form.setFieldValue('documents.identificationDocument', '')
+        form.setFieldValue('documents.cv', '')
+        form.setFieldValue('documents.courseCertificate', '')
+        form.setFieldValue('documents.pedagogicalAggregation', '')
+        form.setFieldValue('documents.certificates', [])
+
+        if (uploadedKeys.length) {
+          toast.error(
+            'Por segurança, os documentos anexados foram removidos. Anexe-os novamente antes de submeter.',
+          )
+        }
+      }
     },
   })
 

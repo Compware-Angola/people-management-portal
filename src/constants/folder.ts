@@ -1,0 +1,1 @@
+export const CANDIDATE_DOCUMENTS_FOLDER = 'candidaturas/docentes'

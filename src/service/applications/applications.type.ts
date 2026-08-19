@@ -1,10 +1,33 @@
 export type CreateTeacherApplicationRequest = {
-  data: FormData;
+  data: Record<string, unknown>;
 }
 
 export type CreateTeacherApplicationResponse ={
   id: number;
   message: string;
+}
+
+export type CheckPersonalUniquenessPayload = {
+  fullName: string
+  maritalStatus: string
+  gender: string
+  birthDate: string
+  documentType: string
+  documentNumber: string
+  documentExpiration: string
+  nationality: string
+  phone: string
+  alternativePhone: string
+  email: string
+  address: string
+}
+
+export type CheckPersonalUniquenessResponse = {
+  emailTaken: boolean
+  documentNumberTaken: boolean
+  documentTypeName: string | null
+  phoneTaken: boolean
+  alternativePhoneSameAsPhone: boolean
 }
 
 

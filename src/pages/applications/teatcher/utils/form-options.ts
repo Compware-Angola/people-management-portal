@@ -30,11 +30,11 @@ export const wizardFormOpts = formOptions({
 
     experience: [{course:"",discipline:"",endYear:"", institution:"",startYear:""}] as TeachingExperienceSchema,
     documents: {
-      cv: undefined as File | undefined,
-      identificationDocument: undefined as File | undefined,
-      certificates: [] as File[],
-      courseCertificate: undefined as File | undefined,
-      pedagogicalAggregation: undefined as File | undefined,
+      cv: '' as string,
+      identificationDocument: '' as string,
+      certificates: [] as string[],
+      courseCertificate: '' as string,
+      pedagogicalAggregation: '' as string,
     },
   },
 })
