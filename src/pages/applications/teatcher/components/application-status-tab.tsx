@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { Mail, User, GraduationCap, ClipboardCheck, RefreshCw } from 'lucide-react'
+import { Mail, User, GraduationCap, ClipboardCheck } from 'lucide-react'
 import type { MyApplication } from '@/service/applications/applications.type'
 
 
