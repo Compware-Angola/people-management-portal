@@ -6,8 +6,8 @@ import { FormDevtoolsPanel } from '@tanstack/react-form-devtools'
 import '../styles.css'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Toaster } from 'sonner'
-import { authStorage } from '@/lib/auth/auth-storage'
-import { QueryClient } from '@tanstack/react-query'
+import type { authStorage } from '@/lib/auth/auth-storage'
+import type { QueryClient } from '@tanstack/react-query'
 
 interface RouterContext {
   queryClient: QueryClient

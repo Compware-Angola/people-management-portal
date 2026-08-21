@@ -1,9 +1,7 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
 import { Mail, User, GraduationCap, ClipboardCheck, RefreshCw } from 'lucide-react'
 import type { MyApplication } from '@/service/applications/applications.type'
-import { useRenewApplication } from '@/hooks/application'
+
 
 interface InfoRowProps {
   icon: React.ReactNode
@@ -32,7 +30,7 @@ interface ApplicationStatusTabProps {
 export function ApplicationStatusTab({
   application,
 }: ApplicationStatusTabProps) {
-  const { mutate: renewApplication, isPending } = useRenewApplication()
+ 
 
   return (
     <div className="space-y-6">
@@ -46,20 +44,7 @@ export function ApplicationStatusTab({
           )}
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={isPending}
-          onClick={() => renewApplication(application.id)}
-        >
-          {isPending ? (
-            <Spinner />
-          ) : (
-            <RefreshCw className="h-3.5 w-3.5" />
-          )}
-          Renovar Candidatura
-        </Button>
+       
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

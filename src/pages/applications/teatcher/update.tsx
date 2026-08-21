@@ -1,14 +1,18 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useMyApplication } from "@/hooks/application"
+import { useMyApplication, useRenewApplication } from "@/hooks/application"
 import { ApplicationStatusTab } from "./components/application-status-tab"
 import { AcademicEducationsTab } from "./components/academic-educations-tab"
 import { TeachingExperiencesTab } from "./components/teaching-experiences-tab"
 import { DocumentsTab } from "./components/documents-tab"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { RefreshCw } from "lucide-react"
 
 
 
 export function UpdateTeacherApplicationPage() {
+   const { mutate: renewApplication, isPending } = useRenewApplication()
   const { data: application, isLoading, isError } = useMyApplication()
 
   if (isLoading) {
@@ -32,7 +36,8 @@ export function UpdateTeacherApplicationPage() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
-      <div>
+      <div className="flex justify-between">
+         <div>
         <h1 className="text-2xl font-semibold text-foreground">
           Minha Candidatura
         </h1>
@@ -40,6 +45,22 @@ export function UpdateTeacherApplicationPage() {
           Consulte e atualize os dados da sua candidatura
         </p>
       </div>
+
+       <Button
+          type="button"
+          size="lg"
+          disabled={isPending}
+          onClick={() => renewApplication(application.id)}
+        >
+          {isPending ? (
+            <Spinner />
+          ) : (
+            <RefreshCw className="h-3.5 w-3.5" />
+          )}
+          Renovar Candidatura
+        </Button>
+      </div>
+     
 
       <Tabs defaultValue="status" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
