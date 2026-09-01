@@ -16,6 +16,7 @@ import { Route as PrivateDashboardRouteImport } from './routes/_private/dashboar
 import { Route as PrivateSplatRouteImport } from './routes/_private/$'
 import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/applications/route'
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
+import { Route as PublicVagasIdRouteImport } from './routes/_public/vagas.$id'
 import { Route as PublicApplicationsTeacherRouteImport } from './routes/_public/applications/teacher'
 import { Route as PrivateAccountsProfileRouteImport } from './routes/_private/accounts/profile'
 import { Route as PrivateAccountsApplicationsRouteImport } from './routes/_private/accounts/applications'
@@ -55,6 +56,11 @@ const PublicApplicationsIndexRoute = PublicApplicationsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PublicApplicationsRouteRoute,
+} as any)
+const PublicVagasIdRoute = PublicVagasIdRouteImport.update({
+  id: '/vagas/$id',
+  path: '/vagas/$id',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicApplicationsTeacherRoute =
   PublicApplicationsTeacherRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/accounts/applications': typeof PrivateAccountsApplicationsRoute
   '/accounts/profile': typeof PrivateAccountsProfileRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
+  '/vagas/$id': typeof PublicVagasIdRoute
   '/applications/': typeof PublicApplicationsIndexRoute
   '/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
   '/login/': typeof PublicAuthLoginIndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/accounts/applications': typeof PrivateAccountsApplicationsRoute
   '/accounts/profile': typeof PrivateAccountsProfileRoute
   '/applications/teacher': typeof PublicApplicationsTeacherRoute
+  '/vagas/$id': typeof PublicVagasIdRoute
   '/applications': typeof PublicApplicationsIndexRoute
   '/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
   '/login': typeof PublicAuthLoginIndexRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/_private/accounts/applications': typeof PrivateAccountsApplicationsRoute
   '/_private/accounts/profile': typeof PrivateAccountsProfileRoute
   '/_public/applications/teacher': typeof PublicApplicationsTeacherRoute
+  '/_public/vagas/$id': typeof PublicVagasIdRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
   '/_public/_auth/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
   '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
@@ -142,6 +151,7 @@ export interface FileRouteTypes {
     | '/accounts/applications'
     | '/accounts/profile'
     | '/applications/teacher'
+    | '/vagas/$id'
     | '/applications/'
     | '/reset-password/$token'
     | '/login/'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/accounts/applications'
     | '/accounts/profile'
     | '/applications/teacher'
+    | '/vagas/$id'
     | '/applications'
     | '/reset-password/$token'
     | '/login'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/_private/accounts/applications'
     | '/_private/accounts/profile'
     | '/_public/applications/teacher'
+    | '/_public/vagas/$id'
     | '/_public/applications/'
     | '/_public/_auth/reset-password/$token'
     | '/_public/_auth/login/'
@@ -230,6 +242,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/applications/'
       preLoaderRoute: typeof PublicApplicationsIndexRouteImport
       parentRoute: typeof PublicApplicationsRouteRoute
+    }
+    '/_public/vagas/$id': {
+      id: '/_public/vagas/$id'
+      path: '/vagas/$id'
+      fullPath: '/vagas/$id'
+      preLoaderRoute: typeof PublicVagasIdRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/applications/teacher': {
       id: '/_public/applications/teacher'
@@ -313,6 +332,7 @@ const PublicApplicationsRouteRouteWithChildren =
 interface PublicRouteRouteChildren {
   PublicApplicationsRouteRoute: typeof PublicApplicationsRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicVagasIdRoute: typeof PublicVagasIdRoute
   PublicAuthResetPasswordTokenRoute: typeof PublicAuthResetPasswordTokenRoute
   PublicAuthLoginIndexRoute: typeof PublicAuthLoginIndexRoute
   PublicAuthRecoverAccountIndexRoute: typeof PublicAuthRecoverAccountIndexRoute
@@ -321,6 +341,7 @@ interface PublicRouteRouteChildren {
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicApplicationsRouteRoute: PublicApplicationsRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
+  PublicVagasIdRoute: PublicVagasIdRoute,
   PublicAuthResetPasswordTokenRoute: PublicAuthResetPasswordTokenRoute,
   PublicAuthLoginIndexRoute: PublicAuthLoginIndexRoute,
   PublicAuthRecoverAccountIndexRoute: PublicAuthRecoverAccountIndexRoute,
