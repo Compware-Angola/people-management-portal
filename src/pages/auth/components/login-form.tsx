@@ -1,4 +1,5 @@
 import { useAppForm } from '@/components/forms'
+import { Button } from '@/components/ui/button'
 import { useLoginMutation } from '@/hooks/auth/use-auth'
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { z } from 'zod'
@@ -78,6 +79,10 @@ export function LoginForm() {
           disabled={loginMutation.isPending}
         />
       </form.AppForm>
+
+      <Button asChild type="button" variant="outline" className="w-full">
+        <Link to="/create-account">Criar conta</Link>
+      </Button>
     </form>
   )
 }

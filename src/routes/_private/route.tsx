@@ -2,6 +2,7 @@ import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { DashboardLayout } from '@/components/layout/dashboard'
 import { authStorage } from '@/lib/auth/auth-storage'
 import { currentUserQueryOptions } from '@/hooks/auth/use-auth'
+import { myUserCollaboratorCompletionQueryOptions } from '@/hooks/user-collaborators'
 
 export const Route = createFileRoute('/_private')({
   beforeLoad: async ({ context, location }) => {
@@ -11,6 +12,9 @@ export const Route = createFileRoute('/_private')({
         search: { redirect: location.href },
       })
     }
+
+    let authenticatedUser
+
     try {
       const { isAuthenticated, user } = await context.queryClient.ensureQueryData(
         currentUserQueryOptions(),
@@ -19,11 +23,21 @@ export const Route = createFileRoute('/_private')({
         authStorage.clear()
         throw redirect({ to: '/login', search: { redirect: location.href } })
       }
-      return { user }
+      authenticatedUser = user
     } catch (error) {
       authStorage.clear()
       throw redirect({ to: '/login', search: { redirect: location.href } })
     }
+
+    const completion = await context.queryClient.ensureQueryData(
+      myUserCollaboratorCompletionQueryOptions(),
+    )
+
+    if (!completion.isComplete && location.pathname !== '/profile-completion') {
+      throw redirect({ to: '/profile-completion' })
+    }
+
+    return { user: authenticatedUser }
   },
   component: RouteComponent,
   notFoundComponent: () => <NotFoundPrivate />,

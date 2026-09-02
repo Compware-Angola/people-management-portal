@@ -3,7 +3,7 @@ import { Outlet, useLocation } from '@tanstack/react-router'
 export function ApplicationLayout() {
   const location = useLocation()
   const isTeacherApplication = location.pathname.includes(
-    '/applications/teacher',
+    '/profile-completion',
   )
 
   const title = isTeacherApplication

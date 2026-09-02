@@ -13,6 +13,11 @@ export type LoginResponse = {
   mensagem: string
 }
 
+export type PeopleManagementPortalLoginResponse = {
+  token: string
+  user: PeopleManagementPortalUser
+}
+
 export type User = {
   codigo: number
   nome: string
@@ -27,6 +32,31 @@ export type User = {
   precisa_mudar_senha: number
   estado: number
   criado_em: string
+}
+
+export type PeopleManagementPortalUser = {
+  id: number
+  personId: number
+  email: string
+  username: string
+  fullName: string
+  status: string
+}
+
+export type UserCollaboratorMeResponse = {
+  id: number
+  email: string
+  username: string
+  personId: number
+  person: {
+    id: number
+    name: string
+    identityDocument: string | null
+    taxIdentificationNumber: string | null
+    phone: string | null
+    alternativePhone: string | null
+    status: number
+  }
 }
 
 export type CurrentUserResponse = {

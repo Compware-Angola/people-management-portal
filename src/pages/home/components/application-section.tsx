@@ -6,7 +6,7 @@ export function ApplicationSection() {
     <section  id="application">
       <div className="flex justify-center mx-auto">
         <ApplicationCard
-          to="/applications/teacher"
+          to="/profile-completion"
           icon={<GraduationCap className="h-6 w-6" />}
           eyebrow="Corpo Docente"
           title="Candidatura para Professor"
