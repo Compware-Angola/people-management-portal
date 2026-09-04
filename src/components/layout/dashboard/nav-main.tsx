@@ -22,11 +22,13 @@ import { useAuth } from '@/hooks/auth'
 export type NavItem = {
   title: string
   url: string
+  hash?: string
   permission?: PermissionsEnum | PermissionsEnum[]
   icon?: LucideIcon
   items?: Array<{
     title: string
     url: string
+    hash?: string
     permission?: PermissionsEnum | PermissionsEnum[]
     icon?: LucideIcon
   }>
@@ -115,7 +117,12 @@ export function NavMain({ items, groupLabel }: Props) {
                     'bg-primary text-primary-foreground hover:bg-primary/90',
                 )}
               >
-                <Link to={item.url} preload="intent" onClick={handleNavigate}>
+                <Link
+                  to={item.url}
+                  hash={item.hash}
+                  preload="intent"
+                  onClick={handleNavigate}
+                >
                   {item.icon && <item.icon className="mr-2 h-4 w-4 shrink-0" />}
                   <span>{item.title}</span>
                 </Link>

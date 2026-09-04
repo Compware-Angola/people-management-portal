@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { FileText, LogOut, User as UserIcon } from 'lucide-react'
+import { BriefcaseBusiness, FileText, LogOut, User as UserIcon } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +29,7 @@ export function UserMenu() {
 
   function handleLogout() {
     logout()
-    navigate({ to: '/login' })
+    navigate({ to: '/', hash: 'application' })
   }
 
   if (isLoading) {
@@ -43,21 +43,37 @@ export function UserMenu() {
   const { user } = data
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <div className="flex items-center gap-2">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="h-9 w-9 rounded-full"
+        onClick={() => navigate({ to: '/', hash: 'application' })}
+        aria-label="Ver vagas"
+        title="Ver vagas"
+      >
+        <BriefcaseBusiness className="h-4 w-4" />
+      </Button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-9 w-9 rounded-full"
+          className="h-10 gap-2 rounded-full px-2"
         >
           <Avatar className="h-9 w-9">
             <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
               {getInitials(user.nome)}
             </AvatarFallback>
           </Avatar>
+          <span className="hidden max-w-40 truncate text-sm font-medium md:inline">
+            {user.nome}
+          </span>
         </Button>
-      </DropdownMenuTrigger>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
           <span className="text-sm font-medium leading-none">
             {user.nome}
@@ -92,7 +108,8 @@ export function UserMenu() {
           <LogOut className="mr-2 h-4 w-4" />
           Sair
         </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }

@@ -6,5 +6,7 @@ export const QUERY_KEY = {
   coursesTrainingAreas: 'course-training-areas',
   academicDegrees: 'academic-degrees',
   applications: 'applications',
+  professionalExperiences: 'professional-experiences',
+  publicVacancies: 'public-vacancies',
   userCollaborators: 'user-collaborators',
 } as const

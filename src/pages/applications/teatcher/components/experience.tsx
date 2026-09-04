@@ -14,6 +14,7 @@ import { useEnsureMinArrayItems } from '../hooks/use-ensure-min-array-items'
 import { wizardFormOpts } from '../utils'
 import { teachingExperienceSchema } from '../schemas/teaching-experience.schema'
 import { cn } from '@/lib/utils'
+import { useCreateMyProfessionalExperiences } from '@/hooks/professional-experiences'
 
 const EMPTY_TEACHING_EXPERIENCE_ITEM = {
   course: '',
@@ -23,6 +24,10 @@ const EMPTY_TEACHING_EXPERIENCE_ITEM = {
   endYear: '',
 }
 
+function extractYear(value: string) {
+  return Number(value.slice(0, 4))
+}
+
 export const TeachingExperienceStep = withForm({
   ...wizardFormOpts,
   props: {
@@ -30,11 +35,25 @@ export const TeachingExperienceStep = withForm({
     setStep: (_step: number) => {},
   },
   render: function Render({ form, step, setStep }) {
+    const createProfessionalExperiences = useCreateMyProfessionalExperiences()
+
     return (
       <form.FormGroup
         name="experience"
         validators={{ onDynamic: teachingExperienceSchema }}
-        onGroupSubmit={() => setStep(step + 1)}
+        onGroupSubmit={async ({ value }) => {
+          await createProfessionalExperiences.mutateAsync(
+            value.map((item) => ({
+              institution: item.institution,
+              area: item.course,
+              function: item.discipline,
+              position: 'Docente',
+              startYear: extractYear(item.startYear),
+              ...(item.endYear ? { endYear: extractYear(item.endYear) } : {}),
+            })),
+          )
+          setStep(step + 1)
+        }}
       >
         {(teachingExperienceGroup) => (
           <form
@@ -183,7 +202,13 @@ export const TeachingExperienceStep = withForm({
                 Voltar
               </button>
               <form.AppForm>
-                <form.SubscribeButton label="Avançar" />
+                <form.SubscribeButton
+                  label={
+                    createProfessionalExperiences.isPending
+                      ? 'A gravar...'
+                      : 'Avançar'
+                  }
+                />
               </form.AppForm>
             </div>
           </form>

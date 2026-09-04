@@ -19,11 +19,13 @@ import { Route as PublicApplicationsRouteRouteImport } from './routes/_public/ap
 import { Route as PublicApplicationsIndexRouteImport } from './routes/_public/applications/index'
 import { Route as PublicVagasIdRouteImport } from './routes/_public/vagas.$id'
 import { Route as PrivateAccountsProfileRouteImport } from './routes/_private/accounts/profile'
-import { Route as PrivateAccountsApplicationsRouteImport } from './routes/_private/accounts/applications'
+import { Route as PrivateAccountsApplicationsRouteRouteImport } from './routes/_private/accounts/applications/route'
 import { Route as PublicAuthRecoverAccountIndexRouteImport } from './routes/_public/_auth/recover-account/index'
 import { Route as PublicAuthLoginIndexRouteImport } from './routes/_public/_auth/login/index'
 import { Route as PublicAuthCreateAccountIndexRouteImport } from './routes/_public/_auth/create-account/index'
+import { Route as PrivateAccountsApplicationsIndexRouteImport } from './routes/_private/accounts/applications/index'
 import { Route as PublicAuthResetPasswordTokenRouteImport } from './routes/_public/_auth/reset-password/$token'
+import { Route as PrivateAccountsApplicationsCreateRouteImport } from './routes/_private/accounts/applications/create'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -74,8 +76,8 @@ const PrivateAccountsProfileRoute = PrivateAccountsProfileRouteImport.update({
   path: '/accounts/profile',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PrivateAccountsApplicationsRoute =
-  PrivateAccountsApplicationsRouteImport.update({
+const PrivateAccountsApplicationsRouteRoute =
+  PrivateAccountsApplicationsRouteRouteImport.update({
     id: '/accounts/applications',
     path: '/accounts/applications',
     getParentRoute: () => PrivateRouteRoute,
@@ -97,11 +99,23 @@ const PublicAuthCreateAccountIndexRoute =
     path: '/create-account/',
     getParentRoute: () => PublicRouteRoute,
   } as any)
+const PrivateAccountsApplicationsIndexRoute =
+  PrivateAccountsApplicationsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => PrivateAccountsApplicationsRouteRoute,
+  } as any)
 const PublicAuthResetPasswordTokenRoute =
   PublicAuthResetPasswordTokenRouteImport.update({
     id: '/_auth/reset-password/$token',
     path: '/reset-password/$token',
     getParentRoute: () => PublicRouteRoute,
+  } as any)
+const PrivateAccountsApplicationsCreateRoute =
+  PrivateAccountsApplicationsCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => PrivateAccountsApplicationsRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -110,11 +124,13 @@ export interface FileRoutesByFullPath {
   '/$': typeof PrivateSplatRoute
   '/dashboard': typeof PrivateDashboardRoute
   '/profile-completion': typeof PrivateProfileCompletionRoute
-  '/accounts/applications': typeof PrivateAccountsApplicationsRoute
+  '/accounts/applications': typeof PrivateAccountsApplicationsRouteRouteWithChildren
   '/accounts/profile': typeof PrivateAccountsProfileRoute
   '/vagas/$id': typeof PublicVagasIdRoute
   '/applications/': typeof PublicApplicationsIndexRoute
+  '/accounts/applications/create': typeof PrivateAccountsApplicationsCreateRoute
   '/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
+  '/accounts/applications/': typeof PrivateAccountsApplicationsIndexRoute
   '/create-account/': typeof PublicAuthCreateAccountIndexRoute
   '/login/': typeof PublicAuthLoginIndexRoute
   '/recover-account/': typeof PublicAuthRecoverAccountIndexRoute
@@ -124,11 +140,12 @@ export interface FileRoutesByTo {
   '/$': typeof PrivateSplatRoute
   '/dashboard': typeof PrivateDashboardRoute
   '/profile-completion': typeof PrivateProfileCompletionRoute
-  '/accounts/applications': typeof PrivateAccountsApplicationsRoute
   '/accounts/profile': typeof PrivateAccountsProfileRoute
   '/vagas/$id': typeof PublicVagasIdRoute
   '/applications': typeof PublicApplicationsIndexRoute
+  '/accounts/applications/create': typeof PrivateAccountsApplicationsCreateRoute
   '/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
+  '/accounts/applications': typeof PrivateAccountsApplicationsIndexRoute
   '/create-account': typeof PublicAuthCreateAccountIndexRoute
   '/login': typeof PublicAuthLoginIndexRoute
   '/recover-account': typeof PublicAuthRecoverAccountIndexRoute
@@ -142,11 +159,13 @@ export interface FileRoutesById {
   '/_private/dashboard': typeof PrivateDashboardRoute
   '/_private/profile-completion': typeof PrivateProfileCompletionRoute
   '/_public/': typeof PublicIndexRoute
-  '/_private/accounts/applications': typeof PrivateAccountsApplicationsRoute
+  '/_private/accounts/applications': typeof PrivateAccountsApplicationsRouteRouteWithChildren
   '/_private/accounts/profile': typeof PrivateAccountsProfileRoute
   '/_public/vagas/$id': typeof PublicVagasIdRoute
   '/_public/applications/': typeof PublicApplicationsIndexRoute
+  '/_private/accounts/applications/create': typeof PrivateAccountsApplicationsCreateRoute
   '/_public/_auth/reset-password/$token': typeof PublicAuthResetPasswordTokenRoute
+  '/_private/accounts/applications/': typeof PrivateAccountsApplicationsIndexRoute
   '/_public/_auth/create-account/': typeof PublicAuthCreateAccountIndexRoute
   '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
   '/_public/_auth/recover-account/': typeof PublicAuthRecoverAccountIndexRoute
@@ -163,7 +182,9 @@ export interface FileRouteTypes {
     | '/accounts/profile'
     | '/vagas/$id'
     | '/applications/'
+    | '/accounts/applications/create'
     | '/reset-password/$token'
+    | '/accounts/applications/'
     | '/create-account/'
     | '/login/'
     | '/recover-account/'
@@ -173,11 +194,12 @@ export interface FileRouteTypes {
     | '/$'
     | '/dashboard'
     | '/profile-completion'
-    | '/accounts/applications'
     | '/accounts/profile'
     | '/vagas/$id'
     | '/applications'
+    | '/accounts/applications/create'
     | '/reset-password/$token'
+    | '/accounts/applications'
     | '/create-account'
     | '/login'
     | '/recover-account'
@@ -194,7 +216,9 @@ export interface FileRouteTypes {
     | '/_private/accounts/profile'
     | '/_public/vagas/$id'
     | '/_public/applications/'
+    | '/_private/accounts/applications/create'
     | '/_public/_auth/reset-password/$token'
+    | '/_private/accounts/applications/'
     | '/_public/_auth/create-account/'
     | '/_public/_auth/login/'
     | '/_public/_auth/recover-account/'
@@ -281,7 +305,7 @@ declare module '@tanstack/react-router' {
       id: '/_private/accounts/applications'
       path: '/accounts/applications'
       fullPath: '/accounts/applications'
-      preLoaderRoute: typeof PrivateAccountsApplicationsRouteImport
+      preLoaderRoute: typeof PrivateAccountsApplicationsRouteRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     '/_public/_auth/recover-account/': {
@@ -305,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthCreateAccountIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_private/accounts/applications/': {
+      id: '/_private/accounts/applications/'
+      path: '/'
+      fullPath: '/accounts/applications/'
+      preLoaderRoute: typeof PrivateAccountsApplicationsIndexRouteImport
+      parentRoute: typeof PrivateAccountsApplicationsRouteRoute
+    }
     '/_public/_auth/reset-password/$token': {
       id: '/_public/_auth/reset-password/$token'
       path: '/reset-password/$token'
@@ -312,14 +343,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthResetPasswordTokenRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_private/accounts/applications/create': {
+      id: '/_private/accounts/applications/create'
+      path: '/create'
+      fullPath: '/accounts/applications/create'
+      preLoaderRoute: typeof PrivateAccountsApplicationsCreateRouteImport
+      parentRoute: typeof PrivateAccountsApplicationsRouteRoute
+    }
   }
 }
+
+interface PrivateAccountsApplicationsRouteRouteChildren {
+  PrivateAccountsApplicationsCreateRoute: typeof PrivateAccountsApplicationsCreateRoute
+  PrivateAccountsApplicationsIndexRoute: typeof PrivateAccountsApplicationsIndexRoute
+}
+
+const PrivateAccountsApplicationsRouteRouteChildren: PrivateAccountsApplicationsRouteRouteChildren =
+  {
+    PrivateAccountsApplicationsCreateRoute:
+      PrivateAccountsApplicationsCreateRoute,
+    PrivateAccountsApplicationsIndexRoute:
+      PrivateAccountsApplicationsIndexRoute,
+  }
+
+const PrivateAccountsApplicationsRouteRouteWithChildren =
+  PrivateAccountsApplicationsRouteRoute._addFileChildren(
+    PrivateAccountsApplicationsRouteRouteChildren,
+  )
 
 interface PrivateRouteRouteChildren {
   PrivateSplatRoute: typeof PrivateSplatRoute
   PrivateDashboardRoute: typeof PrivateDashboardRoute
   PrivateProfileCompletionRoute: typeof PrivateProfileCompletionRoute
-  PrivateAccountsApplicationsRoute: typeof PrivateAccountsApplicationsRoute
+  PrivateAccountsApplicationsRouteRoute: typeof PrivateAccountsApplicationsRouteRouteWithChildren
   PrivateAccountsProfileRoute: typeof PrivateAccountsProfileRoute
 }
 
@@ -327,7 +383,8 @@ const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateSplatRoute: PrivateSplatRoute,
   PrivateDashboardRoute: PrivateDashboardRoute,
   PrivateProfileCompletionRoute: PrivateProfileCompletionRoute,
-  PrivateAccountsApplicationsRoute: PrivateAccountsApplicationsRoute,
+  PrivateAccountsApplicationsRouteRoute:
+    PrivateAccountsApplicationsRouteRouteWithChildren,
   PrivateAccountsProfileRoute: PrivateAccountsProfileRoute,
 }
 

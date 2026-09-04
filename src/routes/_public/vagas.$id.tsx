@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   ArrowLeft,
   Briefcase,
@@ -14,27 +14,138 @@ import {
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CATEGORY_LABEL, getJob, JOBS } from '@/lib/jobs'
+import { useAuth } from '@/hooks/auth/use-auth'
+import { usePublicVacancy } from '@/hooks/public-vacancies'
 import { HomeHeader } from '@/pages/home/components/home-header'
 import { SiteFooter } from '@/pages/home/components/site-footer'
+import type { PublicVacancy } from '@/service/public-vacancies'
 
 export const Route = createFileRoute('/_public/vagas/$id')({
-  loader: ({ params }) => {
-    const job = getJob(params.id)
-
-    if (!job) throw notFound()
-
-    return { job }
-  },
   component: JobDetail,
 })
 
+function getDescription(value: Record<string, unknown> | null | undefined) {
+  if (!value) return '-'
+
+  return String(
+    value.description ??
+      value.designation ??
+      value.name ??
+      value.DESCRICAO ??
+      value.DESIGNACAO ??
+      value.NOME ??
+      '-',
+  )
+}
+
+function formatDate(value: string | null) {
+  if (!value) return 'Sem prazo definido'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'Sem prazo definido'
+
+  return date.toLocaleDateString('pt-PT', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function getOpenedDaysAgo(value: string | null) {
+  if (!value) return 0
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 0
+
+  const diff = Date.now() - date.getTime()
+  return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
+}
+
+function getVacancyView(vacancy: PublicVacancy) {
+  const title = getDescription(vacancy.position)
+  const department = getDescription(vacancy.department)
+  const contract = getDescription(vacancy.hiringType)
+  const documents =
+    vacancy.documents?.map((document) =>
+      document.description || document.originalName || document.type || '-',
+    ) ?? []
+
+  return {
+    title,
+    category: 'Corpo Docente',
+    department,
+    contract,
+    regime: 'Presencial',
+    level: 'Licenciatura',
+    location: 'Universidade Metodista de Angola',
+    deadline: formatDate(vacancy.closingDate),
+    openedDaysAgo: getOpenedDaysAgo(vacancy.publicationDate),
+    applicants: 0,
+    numberOfVacancies: vacancy.numberOfVacancies,
+    description: [
+      `Vaga publicada para ${title}. Consulte os detalhes e submeta a sua candidatura dentro do prazo definido.`,
+      `Esta oportunidade está associada à unidade ${department}.`,
+    ],
+    requirements: [
+      'Consulte os requisitos definidos no edital ou nos documentos da vaga.',
+    ],
+    benefits: [
+      'Processo de candidatura digital.',
+      'Acompanhamento do estado da candidatura pela plataforma.',
+    ],
+    documents:
+      documents.length > 0
+        ? documents
+        : ['Documentos exigidos serão indicados durante a candidatura.'],
+  }
+}
+
 function JobDetail() {
-  const { job } = Route.useLoaderData()
-  const isDocente = job.category === 'docente'
-  const related = JOBS.filter(
-    (item) => item.category === job.category && item.id !== job.id,
-  ).slice(0, 3)
+  const { id } = Route.useParams()
+  const { isAuthenticated } = useAuth()
+  const { data: vacancy, isLoading, isError } = usePublicVacancy(id)
+  const applicationRedirect = `/accounts/applications/create?vacancyCode=${encodeURIComponent(id)}`
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <HomeHeader />
+        <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <p className="text-sm text-muted-foreground">
+            Carregando detalhes da vaga...
+          </p>
+        </main>
+        <SiteFooter />
+      </div>
+    )
+  }
+
+  if (isError || !vacancy) {
+    return (
+      <div className="min-h-screen bg-background">
+        <HomeHeader />
+        <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-dashed border-border p-8">
+            <h1 className="font-display text-2xl text-foreground">
+              Vaga não encontrada
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              A vaga pode ter sido encerrada, removida ou ainda não estar
+              publicada.
+            </p>
+            <Button asChild variant="outline" className="mt-5">
+              <Link to="/" hash="application">
+                Voltar às vagas
+              </Link>
+            </Button>
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    )
+  }
+
+  const job = getVacancyView(vacancy)
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,21 +164,13 @@ function JobDetail() {
           <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex items-start gap-4">
               <div
-                className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
-                  isDocente
-                    ? 'bg-gradient-navy text-primary-foreground'
-                    : 'bg-gradient-gold text-accent-foreground'
-                }`}
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-navy text-primary-foreground"
               >
-                {isDocente ? (
-                  <GraduationCap className="h-6 w-6" />
-                ) : (
-                  <Briefcase className="h-6 w-6" />
-                )}
+                <GraduationCap className="h-6 w-6" />
               </div>
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                  {CATEGORY_LABEL[job.category]}
+                  {job.category}
                 </p>
                 <h1 className="mt-1 font-display text-3xl leading-tight text-foreground sm:text-4xl">
                   {job.title}
@@ -78,12 +181,24 @@ function JobDetail() {
               </div>
             </div>
 
-            <Button asChild size="lg" className="gap-2 shadow-elegant">
-              <Link to="/dashboard">
-                <Send className="h-4 w-4" />
-                Candidatar-me
-              </Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button asChild size="lg" className="gap-2 shadow-elegant">
+                <Link
+                  to="/accounts/applications/create"
+                  search={{ vacancyCode: id }}
+                >
+                  <Send className="h-4 w-4" />
+                  Candidatar-me
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild size="lg" className="gap-2 shadow-elegant">
+                <Link to="/login" search={{ redirect: applicationRedirect }}>
+                  <Send className="h-4 w-4" />
+                  Candidatar-me
+                </Link>
+              </Button>
+            )}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -91,7 +206,8 @@ function JobDetail() {
             <Badge variant="outline">{job.regime}</Badge>
             <Badge variant="outline">{job.level}</Badge>
             <Badge className="border-accent/40 bg-accent/20 text-accent-foreground">
-              {job.applicants} candidatos
+              {job.numberOfVacancies}{' '}
+              {job.numberOfVacancies === 1 ? 'vaga' : 'vagas'}
             </Badge>
           </div>
         </div>
@@ -149,8 +265,8 @@ function JobDetail() {
               />
               <Info
                 icon={<Users className="h-4 w-4" />}
-                label="Candidaturas recebidas"
-                value={`${job.applicants}`}
+                label="Vagas disponíveis"
+                value={`${job.numberOfVacancies}`}
               />
               <Info
                 icon={<Sparkles className="h-4 w-4" />}
@@ -158,42 +274,29 @@ function JobDetail() {
                 value={`há ${job.openedDaysAgo} dias`}
               />
             </dl>
-            <Button asChild className="mt-6 w-full gap-2">
-              <Link to="/dashboard">
-                <Send className="h-4 w-4" />
-                Candidatar-me
-              </Link>
-            </Button>
+            {isAuthenticated ? (
+              <Button asChild className="mt-6 w-full gap-2">
+                <Link
+                  to="/accounts/applications/create"
+                  search={{ vacancyCode: id }}
+                >
+                  <Send className="h-4 w-4" />
+                  Candidatar-me
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild className="mt-6 w-full gap-2">
+                <Link to="/login" search={{ redirect: applicationRedirect }}>
+                  <Send className="h-4 w-4" />
+                  Candidatar-me
+                </Link>
+              </Button>
+            )}
             <p className="mt-3 text-center text-xs text-muted-foreground">
               Processo 100% online e confidencial.
             </p>
           </div>
 
-          {related.length > 0 && (
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-card-soft">
-              <h2 className="font-display text-lg text-foreground">
-                Vagas semelhantes
-              </h2>
-              <ul className="mt-4 space-y-4">
-                {related.map((item) => (
-                  <li key={item.id}>
-                    <Link
-                      to="/vagas/$id"
-                      params={{ id: item.id }}
-                      className="block rounded-xl border border-transparent p-2 transition-smooth hover:border-border hover:bg-muted"
-                    >
-                      <p className="text-sm font-medium text-foreground">
-                        {item.title}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {item.faculty}
-                      </p>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </aside>
       </main>
 

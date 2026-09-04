@@ -1,4 +1,4 @@
-import { TeatcherApplicationPage } from '@/pages/applications/teatcher/create'
+import { ProfileCompletionPage } from '@/pages/profile-completion'
 import { myUserCollaboratorCompletionQueryOptions } from '@/hooks/user-collaborators'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
@@ -12,6 +12,5 @@ export const Route = createFileRoute('/_private/profile-completion')({
       throw redirect({ to: '/dashboard' })
     }
   },
-  component: TeatcherApplicationPage,
+  component: ProfileCompletionPage,
 })
-

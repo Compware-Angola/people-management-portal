@@ -7,14 +7,20 @@ import {
 } from '@/service/applications/applications.service'
 
 import type {
+  MyCandidaciesFilter,
   UpdateAcademicEducationPayload,
   UpdateTeachingExperiencePayload,
 } from '@/service/applications/applications.type'
 import { queryClient } from '@/lib/query-client';
-import { createTeacherApplication, getMyApplication } from '@/service/applications/applications.service';
+import {
+  createTeacherApplication,
+  getMyApplication,
+  getMyCandidacies,
+} from '@/service/applications/applications.service';
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 const APPLICATION_QUERY_KEY = [ QUERY_KEY.applications, 'me']
+const MY_CANDIDACIES_QUERY_KEY = [QUERY_KEY.applications, 'me', 'candidacies']
 
 export function useCreateTeacherApplication() {
   return useMutation({
@@ -22,9 +28,8 @@ export function useCreateTeacherApplication() {
     onError:(error)=> {
         toast.error(getApiErrorMessage(error))
     },
-    onSuccess: ({message}) => {
-        toast.success(message)
-        toast.success("Enviamos um email para confirmar a sua inscrição!")
+    onSuccess: () => {
+        toast.success('Candidatura submetida com sucesso')
     }
   });
   
@@ -37,6 +42,17 @@ export function useCreateTeacherApplication() {
 
 export function useMyApplication() {
   return useQuery(myApplicationQueryOptions())
+}
+
+export const myCandidaciesQueryOptions = (filter?: MyCandidaciesFilter) =>
+  queryOptions({
+    queryKey: [...MY_CANDIDACIES_QUERY_KEY, filter],
+    queryFn: () => getMyCandidacies(filter),
+    staleTime: 60 * 1000,
+  })
+
+export function useMyCandidacies(filter?: MyCandidaciesFilter) {
+  return useQuery(myCandidaciesQueryOptions(filter))
 }
 
 export function useUpdateAcademicEducations(candidateId: number) {

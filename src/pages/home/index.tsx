@@ -12,14 +12,15 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { usePublicVacancies } from '@/hooks/public-vacancies'
 import {
   CONTRACTS,
-  FACULTIES,
-  JOBS,
   LEVELS,
   REGIMES,
   type JobCategory,
+  type Job,
 } from '@/lib/jobs'
+import type { PublicVacancy } from '@/service/public-vacancies'
 
 import { HomeHeader } from './components/home-header'
 import { JobCard } from './components/job-card'
@@ -45,15 +46,101 @@ const INITIAL: Filters = {
   sort: 'recentes',
 }
 
+function getDescription(value: Record<string, unknown> | null | undefined) {
+  if (!value) return '-'
+
+  return String(
+    value.description ??
+      value.designation ??
+      value.name ??
+      value.DESCRICAO ??
+      value.DESIGNACAO ??
+      value.NOME ??
+      '-',
+  )
+}
+
+function getOpenedDaysAgo(value: string | null) {
+  if (!value) return 0
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 0
+
+  const diff = Date.now() - date.getTime()
+  return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
+}
+
+function formatDate(value: string | null) {
+  if (!value) return 'Sem prazo definido'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'Sem prazo definido'
+
+  return date.toLocaleDateString('pt-PT', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function mapPublicVacancyToJob(vacancy: PublicVacancy): Job {
+  const title = getDescription(vacancy.position)
+  const department = getDescription(vacancy.department)
+  const contract = getDescription(vacancy.hiringType)
+
+  return {
+    id: vacancy.code,
+    title,
+    category: 'docente',
+    faculty: department,
+    contract: contract as Job['contract'],
+    regime: 'Presencial',
+    level: 'Licenciatura',
+    location: 'Universidade Metodista de Angola',
+    deadline: formatDate(vacancy.closingDate),
+    openedDaysAgo: getOpenedDaysAgo(vacancy.publicationDate),
+    summary: `${vacancy.numberOfVacancies} ${
+      vacancy.numberOfVacancies === 1 ? 'vaga disponível' : 'vagas disponíveis'
+    } para ${title}.`,
+    bullets: [],
+    description: [
+      `Vaga publicada para ${title}. Consulte os detalhes e submeta a sua candidatura dentro do prazo definido.`,
+    ],
+    requirements: [],
+    benefits: [],
+    documents:
+      vacancy.documents?.map((document) =>
+        document.description || document.originalName || document.type || '-',
+      ) ?? [],
+    applicants: 0,
+  }
+}
+
 export function Home() {
   const [filters, setFilters] = useState<Filters>(INITIAL)
+  const { data: vacancies, isLoading } = usePublicVacancies({
+    page: 1,
+    limit: 50,
+  })
+  const jobs = useMemo(
+    () => vacancies?.data.map(mapPublicVacancyToJob) ?? [],
+    [vacancies],
+  )
+  const faculties = useMemo(
+    () => Array.from(new Set(jobs.map((job) => job.faculty))).filter(Boolean),
+    [jobs],
+  )
+  const contracts = useMemo(
+    () => Array.from(new Set(jobs.map((job) => job.contract))).filter(Boolean),
+    [jobs],
+  )
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) =>
     setFilters((prev) => ({ ...prev, [key]: value }))
 
   const results = useMemo(() => {
     const q = filters.q.trim().toLowerCase()
-    const list = JOBS.filter((job) => {
+    const list = jobs.filter((job) => {
       if (filters.category !== 'todas' && job.category !== filters.category) {
         return false
       }
@@ -92,7 +179,7 @@ export function Home() {
 
       return a.openedDaysAgo - b.openedDaysAgo
     })
-  }, [filters])
+  }, [filters, jobs])
 
   const activeFilters =
     (filters.category !== 'todas' ? 1 : 0) +
@@ -196,7 +283,7 @@ export function Home() {
                       onClick={() => set('category', 'todas')}
                       label="Todas as vagas"
                       icon={<Briefcase className="h-4 w-4" />}
-                      count={JOBS.length}
+                      count={jobs.length}
                     />
                     <CategoryButton
                       active={filters.category === 'docente'}
@@ -204,7 +291,7 @@ export function Home() {
                       label="Corpo docente"
                       icon={<GraduationCap className="h-4 w-4" />}
                       count={
-                        JOBS.filter((job) => job.category === 'docente').length
+                        jobs.filter((job) => job.category === 'docente').length
                       }
                     />
                     <CategoryButton
@@ -213,7 +300,7 @@ export function Home() {
                       label="Técnico-administrativo"
                       icon={<Briefcase className="h-4 w-4" />}
                       count={
-                        JOBS.filter((job) => job.category === 'tecnico').length
+                        jobs.filter((job) => job.category === 'tecnico').length
                       }
                     />
                   </div>
@@ -225,7 +312,7 @@ export function Home() {
                   onChange={(value) => set('faculty', value)}
                   allLabel="Todas"
                   allValue="todas"
-                  options={[...FACULTIES]}
+                  options={faculties}
                 />
                 <SelectField
                   label="Tipo de contrato"
@@ -233,7 +320,7 @@ export function Home() {
                   onChange={(value) => set('contract', value)}
                   allLabel="Todos"
                   allValue="todos"
-                  options={[...CONTRACTS]}
+                  options={contracts.length > 0 ? contracts : [...CONTRACTS]}
                 />
                 <SelectField
                   label="Regime"
@@ -283,7 +370,13 @@ export function Home() {
               </label>
             </div>
 
-            {results.length === 0 ? (
+            {isLoading ? (
+              <div className="mt-8 rounded-2xl border border-dashed border-border p-12 text-center">
+                <p className="font-display text-lg text-foreground">
+                  Carregando vagas abertas...
+                </p>
+              </div>
+            ) : results.length === 0 ? (
               <div className="mt-8 rounded-2xl border border-dashed border-border p-12 text-center">
                 <p className="font-display text-lg text-foreground">
                   Nenhuma vaga corresponde aos filtros

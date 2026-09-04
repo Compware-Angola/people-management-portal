@@ -1,10 +1,14 @@
 export type CreateTeacherApplicationRequest = {
-  data: FormData;
+  vacancyCode: string;
 }
 
 export type CreateTeacherApplicationResponse ={
-  id: number;
-  message: string;
+  code: number;
+  state: number;
+  stateLabel: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  vacancy: CandidacyVacancySummary | null;
 }
 
 
@@ -66,6 +70,51 @@ export type MyApplication= {
   academicEducations: AcademicEducation[]
   teachingExperiences: TeachingExperience[]
   documents: ApplicationDocument[]
+}
+
+export type CandidacyRelation = {
+  code?: number
+  id?: number
+  description?: string | null
+  designation?: string | null
+  name?: string | null
+  acronym?: string | null
+}
+
+export type CandidacyVacancySummary = {
+  code: string
+  numberOfVacancies: number
+  publicationDate: string | null
+  closingDate: string | null
+  state: CandidacyRelation | null
+  position: CandidacyRelation | null
+  department: CandidacyRelation | null
+  hiringType: CandidacyRelation | null
+}
+
+export type MyCandidacy = {
+  code: number
+  state: number
+  stateLabel: string | null
+  createdAt: string
+  updatedAt: string | null
+  vacancy: CandidacyVacancySummary | null
+}
+
+export type MyCandidaciesFilter = {
+  state?: number
+  page?: number
+  limit?: number
+}
+
+export type MyCandidaciesResponse = {
+  data: MyCandidacy[]
+  meta: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
 }
 
 
